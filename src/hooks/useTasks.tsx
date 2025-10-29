@@ -5,6 +5,7 @@ import {
   createTaskWithAI,
   deleteTask,
   updateTask,
+  generateSubtasksForTask
 } from '../api/tasks';
 
 export function useTasks() {
@@ -42,6 +43,14 @@ export function useTasks() {
     },
   });
 
+   const generateSubtasks = useMutation({
+    mutationFn: generateSubtasksForTask,
+    onSuccess: () => {
+      // Refrescamos la lista al generar subtareas
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
+
   return {
     tasks,
     isLoading,
@@ -49,5 +58,6 @@ export function useTasks() {
     createTask,
     removeTask,
     update,
+    generateSubtasks
   };
 }
