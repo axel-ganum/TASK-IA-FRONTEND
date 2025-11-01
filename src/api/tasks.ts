@@ -49,11 +49,10 @@ export const deleteTask = async (id: string): Promise<void> => {
 export const analyzeTaskWithAI = async (
   question: string
 ): Promise<{ insights: string; suggestions: string }> => {
-  const { data } = await axios.get(`${API_URL}/tasks/analyze`, {
-    data: { question },
-  });
+  const { data } = await axios.post(`${API_URL}/tasks/analyze`, { question });
   return data;
 };
+
 
 // Generar subtareas automáticas con IA
 export const generateSubtasksForTask = async (id: string): Promise<Task> => {

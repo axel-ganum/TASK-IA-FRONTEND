@@ -4,7 +4,6 @@ export interface Subtask {
   title: string;
   description?: string | null;
   completed: boolean;
-  task?: Task; // opcional para evitar ciclos infinitos en JSON
 }
 
 export interface Task {
