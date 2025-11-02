@@ -68,3 +68,14 @@ export const summarizeTasks = async (): Promise<{
   const { data } = await axios.post(`${API_URL}/tasks/summarize`);
   return data;
 };
+
+export async function updateSubtask(id: string, updates: any) {
+  const res = await axios.patch(`${API_URL}/subtasks/${id}`, updates);
+  return res.data;
+}
+
+// ❌ 🆕 Eliminar una subtarea
+export async function deleteSubtask(id: string) {
+  const res = await axios.delete(`${API_URL}/subtasks/${id}`);
+  return res.data;
+}

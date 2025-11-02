@@ -7,6 +7,8 @@ import {
   generateSubtasksForTask,
   summarizeTasks,
   analyzeTaskWithAI,
+  deleteSubtask,
+  updateSubtask,
 } from '../api/tasks';
 import type { Task } from '../types/Task';
 
@@ -59,6 +61,17 @@ export function useTasks() {
     mutationFn: analyzeTaskWithAI,
   });
 
+  const updateSubtaskMutation = useMutation({
+  mutationFn: (payload: { id: string; updates: any }) => updateSubtask(payload.id, payload.updates),
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+});
+
+const deleteSubtaskMutation = useMutation({
+  mutationFn: (id: string) => deleteSubtask(id),
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+});
+
+
   return {
     tasks,
     isLoading,
@@ -69,6 +82,8 @@ export function useTasks() {
     generateSubtasks,
     summarize,
     analyze,
+    updateSubtaskMutation,
+    deleteSubtaskMutation,
   };
 }
 
