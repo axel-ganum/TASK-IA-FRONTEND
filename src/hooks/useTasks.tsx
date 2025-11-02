@@ -10,7 +10,7 @@ import {
   deleteSubtask,
   updateSubtask,
 } from '../api/tasks';
-import type { Task } from '../types/Task';
+import type { Subtask, Task } from '../types/Task';
 
 export function useTasks() {
   const queryClient = useQueryClient();
@@ -61,14 +61,33 @@ export function useTasks() {
     mutationFn: analyzeTaskWithAI,
   });
 
-  const updateSubtaskMutation = useMutation({
-  mutationFn: (payload: { id: string; updates: any }) => updateSubtask(payload.id, payload.updates),
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+ const updateSubtaskMutation = useMutation({
+  mutationFn: ({ subtaskId, updates }: { subtaskId: string; updates: Partial<Subtask> }) =>
+    updateSubtask(subtaskId, updates),
+  onSuccess: (updatedSubtask) => {
+    queryClient.setQueryData<Task[]>(['tasks'], (tasks) =>
+      tasks?.map((t) => ({
+        ...t,
+        subtasks: t.subtasks?.map((s) =>
+          s.id === updatedSubtask.id ? updatedSubtask : s
+        ),
+      }))
+    );
+  },
 });
 
+
+
 const deleteSubtaskMutation = useMutation({
-  mutationFn: (id: string) => deleteSubtask(id),
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+  mutationFn: (subtaskId: string) => deleteSubtask(subtaskId),
+  onSuccess: (_, subtaskId) => {
+    queryClient.setQueryData<Task[]>(['tasks'], (tasks) =>
+      tasks?.map((t) => ({
+        ...t,
+        subtasks: t.subtasks?.filter((s) => s.id !== subtaskId),
+      }))
+    );
+  },
 });
 
 

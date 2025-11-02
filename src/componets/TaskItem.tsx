@@ -69,7 +69,7 @@ export function TaskItem({ task }: Props) {
               <div className="flex gap-2">
                 <button
                   onClick={() =>
-                    updateSubtaskMutation.mutate({ id: sub.id, updates: { completed: !sub.completed } })
+                    updateSubtaskMutation.mutate({ subtaskId: sub.id, updates: { completed: !sub.completed } })
                   }
                   className="text-xs text-blue-600 hover:underline"
                 >
