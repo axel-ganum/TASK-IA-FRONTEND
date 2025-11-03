@@ -8,10 +8,20 @@ interface Props {
 export function TaskItem({ task }: Props) {
   const { update, removeTask, generateSubtasks, analyze, updateSubtaskMutation, deleteSubtaskMutation } = useTasks();
 
-  const handleAnalyze = async () => {
-    const result = await analyze.mutateAsync(task.id);
-    alert(`💡 Insights:\n${result.insights}\n\n🧭 Sugerencias:\n${result.suggestions}`);
-  };
+ const handleAnalyze = async () => {
+  try {
+    const result = await analyze.mutateAsync(task.id); // o con pregunta: task.description
+    // parseamos si vino como string JSON
+    const parsed = typeof result === 'string' ? JSON.parse(result) : result;
+
+    alert(
+      `💡 Insights:\n${parsed.insights}\n\n🧭 Sugerencias:\n${parsed.suggestions}`
+    );
+  } catch (error) {
+    console.error('Error al analizar la tarea:', error);
+    alert('No se pudo analizar la tarea. Revisa la consola para más detalles.');
+  }
+};
 
   return (
     <div className="p-4 border rounded-lg shadow-sm bg-white space-y-2">
