@@ -9,19 +9,21 @@ export function TaskList() {
     alert(`🧾 Resumen general:\n${result.summary}`);
   };
 
-  if (isLoading) return <p>Cargando tareas...</p>;
-  if (isError) return <p>Error al cargar tareas.</p>;
-  if (!tasks?.length) return <p>No hay tareas todavía.</p>;
+ if (isLoading) return <p className="text-center text-gray-500">Cargando tareas...</p>;
+  if (isError) return <p className="text-center text-red-500">Error al cargar tareas.</p>;
+  if (!tasks?.length) return <p className="text-center text-gray-400">No hay tareas todavía.</p>;
 
   return (
-    <div className="space-y-4">
-      <button
-        onClick={handleSummarize}
-        disabled={summarize.isPending}
-        className="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm"
-      >
-        {summarize.isPending ? 'Resumiendo...' : 'Resumir todas las tareas con IA'}
-      </button>
+     <div className="space-y-5">
+      <div className="flex justify-center">
+        <button
+          onClick={handleSummarize}
+          disabled={summarize.isPending}
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-lg font-medium shadow hover:opacity-90 transition"
+        >
+          {summarize.isPending ? "🧠 Resumiendo..." : "Resumir todas las tareas con IA"}
+        </button>
+      </div>
 
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />

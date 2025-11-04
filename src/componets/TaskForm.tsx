@@ -12,19 +12,20 @@ export function TaskForm() {
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-gray-50 mb-4">
+     <div className="p-6 bg-white border border-indigo-100 rounded-2xl shadow-md transition hover:shadow-lg">
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Describí la tarea que querés crear con IA..."
-        className="w-full p-2 border rounded-md mb-2"
+        placeholder="📝 Describí la tarea que querés crear con IA..."
+        className="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+        rows={3}
       />
       <button
         onClick={handleSubmit}
         disabled={!message.trim() || createTask.isPending}
-        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
       >
-        {createTask.isPending ? "Creando..." : "Crear tarea con IA"}
+        {createTask.isPending ? "Creando..." : "✨ Crear tarea con IA"}
       </button>
     </div>
   );

@@ -24,26 +24,25 @@ export function TaskItem({ task }: Props) {
 };
 
   return (
-    <div className="p-4 border rounded-lg shadow-sm bg-white space-y-2">
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-lg">
-          {task.completed ? '✅ ' : '🕓 '}
-          {task.title}
+     <div className="p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition space-y-2">
+      <div className="flex justify-between items-start">
+        <h3 className="font-semibold text-lg text-gray-800">
+          {task.completed ? "✅" : "🕓"} {task.title}
         </h3>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 text-sm">
           <button
             onClick={() =>
               update.mutate({ id: task.id, updates: { completed: !task.completed } })
             }
-            className="text-sm text-blue-600 hover:underline"
+            className="text-blue-600 hover:underline"
           >
-            {task.completed ? 'Marcar pendiente' : 'Marcar completada'}
+            {task.completed ? "Marcar pendiente" : "Marcar completada"}
           </button>
 
           <button
             onClick={() => removeTask.mutate(task.id)}
-            className="text-sm text-red-600 hover:underline"
+            className="text-red-600 hover:underline"
           >
             Eliminar
           </button>
@@ -51,14 +50,14 @@ export function TaskItem({ task }: Props) {
           <button
             onClick={() => generateSubtasks.mutate(task.id)}
             disabled={generateSubtasks.isPending}
-            className="text-sm text-purple-600 hover:underline"
+            className="text-purple-600 hover:underline"
           >
-            {generateSubtasks.isPending ? 'Generando subtareas...' : 'Generar subtareas con IA'}
+            {generateSubtasks.isPending ? "Generando..." : "Subtareas con IA"}
           </button>
 
           <button
             onClick={handleAnalyze}
-            className="text-sm text-green-600 hover:underline"
+            className="text-green-600 hover:underline"
           >
             Analizar con IA
           </button>
@@ -66,24 +65,31 @@ export function TaskItem({ task }: Props) {
       </div>
 
       {task.description && <p className="text-sm text-gray-600">{task.description}</p>}
-      {task.tags?.length > 0 && <p className="text-xs text-gray-500">Etiquetas: {task.tags.join(', ')}</p>}
 
-      {/* Subtareas */}
+      {task.tags?.length > 0 && (
+        <p className="text-xs text-gray-500">
+          🏷️ {task.tags.join(", ")}
+        </p>
+      )}
+
       {task.subtasks?.length > 0 && (
         <ul className="list-disc pl-6 mt-2 text-sm text-gray-700 space-y-1">
           {task.subtasks.map((sub) => (
             <li key={sub.id} className="flex justify-between items-center">
               <span>
-                {sub.completed ? '✅ ' : '🕓 '} {sub.title}
+                {sub.completed ? "✅" : "🕓"} {sub.title}
               </span>
               <div className="flex gap-2">
                 <button
                   onClick={() =>
-                    updateSubtaskMutation.mutate({ subtaskId: sub.id, updates: { completed: !sub.completed } })
+                    updateSubtaskMutation.mutate({
+                      subtaskId: sub.id,
+                      updates: { completed: !sub.completed },
+                    })
                   }
                   className="text-xs text-blue-600 hover:underline"
                 >
-                  {sub.completed ? 'Marcar pendiente' : 'Marcar completada'}
+                  {sub.completed ? "Pendiente" : "Completada"}
                 </button>
 
                 <button
