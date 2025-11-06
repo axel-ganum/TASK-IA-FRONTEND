@@ -1,12 +1,17 @@
 import { TaskItem } from './TaskItem';
 import { useTasks } from '../hooks/useTasks';
+import { toast } from 'react-toastify';
 
 export function TaskList() {
   const { tasks, isLoading, isError, summarize } = useTasks();
 
   const handleSummarize = async () => {
-    const result = await summarize.mutateAsync();
-    alert(`🧾 Resumen general:\n${result.summary}`);
+       try {
+      const result = await summarize.mutateAsync();
+      toast.success(`🧾 Resumen generado con IA\n${result.summary}`);
+    } catch (error) {
+      toast.error("Error al resumir tareas");
+    }
   };
 
  if (isLoading) return <p className="text-center text-gray-500">Cargando tareas...</p>;
