@@ -67,33 +67,41 @@ const handleAnalyze = async () => {
         </h3>
 
         <div className="flex flex-wrap gap-2 text-sm">
-          <button
+          <Button
+          variant="link"
+          color="blue"
             onClick={() =>
               update.mutate({ id: task.id, updates: { completed: !task.completed } })
             }
-            className="text-blue-600 hover:underline"
+           
           >
             {task.completed ? "Marcar pendiente" : "Marcar completada"}
-          </button>
-
-          <button
-            onClick={() => removeTask.mutate(task.id)}
-            className="text-red-600 hover:underline"
-          >
-            Eliminar
-          </button>
-
-          <button
-            onClick={() => generateSubtasks.mutate(task.id)}
-            disabled={generateSubtasks.isPending}
-            className="text-purple-600 hover:underline"
-          >
-            {generateSubtasks.isPending ? "Generando..." : "Subtareas con IA"}
-          </button>
+          </Button>
 
           <Button
+           variant="link" color="red"
+            onClick={() => removeTask.mutate(task.id)}
+            
+          >
+            Eliminar
+          </Button>
+
+          <Button
+           variant="link" 
+           color="green"
+            onClick={() => generateSubtasks.mutate(task.id)}
+            disabled={generateSubtasks.isPending}
+            
+          >
+            {generateSubtasks.isPending ? "Generando..." : "Subtareas con IA"}
+          </Button>
+
+          <Button
+           variant="link"
+           color="purple"
+          
             onClick={handleAnalyze}
-            className="text-green-600 hover:underline"
+            
           >
             Analizar con IA
           </Button>
