@@ -60,18 +60,21 @@ const handleAnalyze = async () => {
 
 
   return (
-    <div className="p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition space-y-2 text-gray-800">
-
+     <div className="p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all duration-300 space-y-3 text-gray-800">
+      {/* Encabezado */}
       <div className="flex justify-between items-start">
-        <h3 className="font-semibold text-lg text-gray-900 tracking-tight">
+        <h3 className="font-semibold text-lg text-gray-900 leading-snug tracking-tight">
           {task.completed ? "✅" : "🕓"} {task.title}
         </h3>
 
         <div className="flex flex-wrap gap-2 text-sm font-medium">
-          <Button variant="link" color="blue"
+          <Button
+            variant="link"
+            color="blue"
             onClick={() =>
               update.mutate({ id: task.id, updates: { completed: !task.completed } })
-            }>
+            }
+          >
             {task.completed ? "Marcar pendiente" : "Marcar completada"}
           </Button>
 
@@ -79,31 +82,39 @@ const handleAnalyze = async () => {
             Eliminar
           </Button>
 
-          <Button variant="link" color="green"
+          <Button
+            variant="link"
+            color="green"
             onClick={() => generateSubtasks.mutate(task.id)}
-            disabled={generateSubtasks.isPending}>
-            {generateSubtasks.isPending ? "Generando..." : "Subtareas con IA"}
+            disabled={generateSubtasks.isPending}
+          >
+            {generateSubtasks.isPending ? "Generando..." : "🟢 Subtareas con IA"}
           </Button>
 
           <Button variant="link" color="purple" onClick={handleAnalyze}>
-            Analizar con IA
+            🔮 Analizar con IA
           </Button>
         </div>
       </div>
 
+      {/* Descripción */}
       {task.description && (
         <p className="text-sm text-gray-600 leading-relaxed">{task.description}</p>
       )}
 
+      {/* Tags */}
       {task.tags?.length > 0 && (
         <p className="text-xs text-gray-500">🏷️ {task.tags.join(", ")}</p>
       )}
 
+      {/* Subtareas */}
       {task.subtasks?.length > 0 && (
-        <ul className="list-disc pl-6 mt-2 text-sm text-gray-700 space-y-1 leading-snug">
+        <ul className="list-disc pl-5 mt-2 text-sm text-gray-700 space-y-1">
           {task.subtasks.map((sub) => (
             <li key={sub.id} className="flex justify-between items-center">
-              <span>{sub.completed ? "✅" : "🕓"} {sub.title}</span>
+              <span>
+                {sub.completed ? "✅" : "🕓"} {sub.title}
+              </span>
               <div className="flex gap-2">
                 <button
                   onClick={() =>
@@ -112,13 +123,14 @@ const handleAnalyze = async () => {
                       updates: { completed: !sub.completed },
                     })
                   }
-                  className="text-xs text-blue-600 hover:underline">
+                  className="text-xs text-blue-600 hover:underline"
+                >
                   {sub.completed ? "Pendiente" : "Completada"}
                 </button>
-
                 <button
                   onClick={() => deleteSubtaskMutation.mutate(sub.id)}
-                  className="text-xs text-red-600 hover:underline">
+                  className="text-xs text-red-600 hover:underline"
+                >
                   Eliminar
                 </button>
               </div>
@@ -127,9 +139,9 @@ const handleAnalyze = async () => {
         </ul>
       )}
 
-      {/* --- Modal de resultados IA --- */}
+      {/* Modal de análisis IA */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg font-[Inter]">
+        <DialogContent className="max-w-lg font-[Manrope]">
           <DialogHeader>
             <div className="text-lg font-bold text-indigo-700">
               <DialogTitle>
