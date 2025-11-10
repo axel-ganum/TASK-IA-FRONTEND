@@ -60,90 +60,113 @@ const handleAnalyze = async () => {
 
 
   return (
-     <div className="p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all duration-300 space-y-3 text-gray-800">
+
+   <div
+      className="
+        flex flex-col justify-between
+        bg-white/70 backdrop-blur-xl border border-white/40
+        rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1
+        transition-all duration-300 ease-out
+        text-gray-800 overflow-hidden p-5 w-full max-w-sm
+      "
+    >
       {/* Encabezado */}
-      <div className="flex justify-between items-start">
-        <h3 className="font-semibold text-lg text-gray-900 leading-snug tracking-tight">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="font-semibold text-base text-gray-900 leading-snug line-clamp-2">
           {task.completed ? "✅" : "🕓"} {task.title}
         </h3>
 
-        <div className="flex flex-wrap gap-2 text-sm font-medium">
+        <div className="flex flex-wrap gap-1 text-xs font-medium">
           <Button
             variant="link"
-            color="blue"
             onClick={() =>
               update.mutate({ id: task.id, updates: { completed: !task.completed } })
             }
+            className="text-indigo-600 hover:underline"
           >
-            {task.completed ? "Marcar pendiente" : "Marcar completada"}
-          </Button>
-
-          <Button variant="link" color="red" onClick={() => removeTask.mutate(task.id)}>
-            Eliminar
+            {task.completed ? "Pendiente" : "Completada"}
           </Button>
 
           <Button
             variant="link"
-            color="green"
-            onClick={() => generateSubtasks.mutate(task.id)}
-            disabled={generateSubtasks.isPending}
+            onClick={() => removeTask.mutate(task.id)}
+            className="text-red-600 hover:underline"
           >
-            {generateSubtasks.isPending ? "Generando..." : "🟢 Subtareas con IA"}
-          </Button>
-
-          <Button variant="link" color="purple" onClick={handleAnalyze}>
-            🔮 Analizar con IA
+            Eliminar
           </Button>
         </div>
       </div>
 
       {/* Descripción */}
       {task.description && (
-        <p className="text-sm text-gray-600 leading-relaxed">{task.description}</p>
+        <p className="text-sm text-gray-600 mb-3 line-clamp-3">{task.description}</p>
       )}
 
       {/* Tags */}
       {task.tags?.length > 0 && (
-        <p className="text-xs text-gray-500">🏷️ {task.tags.join(", ")}</p>
+        <div className="text-xs text-gray-500 mb-3">🏷️ {task.tags.join(", ")}</div>
       )}
 
       {/* Subtareas */}
       {task.subtasks?.length > 0 && (
-        <ul className="list-disc pl-5 mt-2 text-sm text-gray-700 space-y-1">
-          {task.subtasks.map((sub) => (
-            <li key={sub.id} className="flex justify-between items-center">
-              <span>
-                {sub.completed ? "✅" : "🕓"} {sub.title}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() =>
-                    updateSubtaskMutation.mutate({
-                      subtaskId: sub.id,
-                      updates: { completed: !sub.completed },
-                    })
-                  }
-                  className="text-xs text-blue-600 hover:underline"
-                >
-                  {sub.completed ? "Pendiente" : "Completada"}
-                </button>
-                <button
-                  onClick={() => deleteSubtaskMutation.mutate(sub.id)}
-                  className="text-xs text-red-600 hover:underline"
-                >
-                  Eliminar
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="border-t border-gray-100 pt-3 mt-auto">
+          <ul className="space-y-1 text-sm text-gray-700">
+            {task.subtasks.map((sub) => (
+              <li key={sub.id} className="flex justify-between items-center">
+                <span className="truncate">
+                  {sub.completed ? "✅" : "🕓"} {sub.title}
+                </span>
+                <div className="flex gap-2 text-xs">
+                  <button
+                    onClick={() =>
+                      updateSubtaskMutation.mutate({
+                        subtaskId: sub.id,
+                        updates: { completed: !sub.completed },
+                      })
+                    }
+                    className="text-blue-600 hover:underline"
+                  >
+                    {sub.completed ? "Pendiente" : "Hecho"}
+                  </button>
+                  <button
+                    onClick={() => deleteSubtaskMutation.mutate(sub.id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
-      {/* Modal de análisis IA */}
+      {/* Botones IA */}
+      <div className="mt-4 flex justify-end gap-3 text-xs font-medium">
+        <Button
+          variant="link"
+          onClick={() => generateSubtasks.mutate(task.id)}
+          disabled={generateSubtasks.isPending}
+          className="text-green-600 hover:underline"
+        >
+          {generateSubtasks.isPending ? "..." : "Subtareas IA"}
+        </Button>
+
+        <Button
+          variant="link"
+          onClick={handleAnalyze}
+          disabled={analyze.isPending}
+          className="text-purple-600 hover:underline"
+        >
+          {analyze.isPending ? "Analizando..." : "Analizar"}
+        </Button>
+      </div>
+
+      {/* Modal de análisis */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg font-[Manrope]">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <div className="text-lg font-bold text-indigo-700">
+            <div className="text-indigo-700 text-lg font-bold">
               <DialogTitle>
                 💡 Análisis de la tarea
               </DialogTitle>
@@ -151,7 +174,7 @@ const handleAnalyze = async () => {
           </DialogHeader>
 
           {analysis ? (
-            <div className="space-y-5 text-[15px] leading-relaxed text-gray-800">
+            <div className="space-y-4 text-[15px] leading-relaxed text-gray-800">
               <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
                 <p className="font-semibold text-indigo-700 mb-1">💭 Insights:</p>
                 <p className="whitespace-pre-line text-gray-700">
