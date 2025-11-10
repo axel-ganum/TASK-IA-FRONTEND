@@ -62,6 +62,8 @@ export const generateSubtasksForTask = async (id: string): Promise<Task> => {
 
 // Resumir todas las tareas con IA
 export const summarizeTasks = async (): Promise<{
+  message: string;
+  result: string;
   success: boolean;
   summary: string;
 }> => {

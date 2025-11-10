@@ -6,36 +6,44 @@ export function TaskList() {
   const { tasks, isLoading, isError, summarize } = useTasks();
 
   const handleSummarize = async () => {
-       try {
+    try {
       const result = await summarize.mutateAsync();
-      toast.success(`🧾 Resumen generado con IA\n${result.summary}`);
+      console.log("🧠 Resultado del resumen:", result);
+
+      const summary =
+        result?.summary ||
+        result?.result ||
+        result?.message ||
+        JSON.stringify(result, null, 2);
+
+      toast.success(`🧾 Resumen generado con IA\n${summary}`);
     } catch (error) {
+      console.error("Error al resumir tareas:", error);
       toast.error("Error al resumir tareas");
     }
   };
 
- if (isLoading) return <p className="text-center text-gray-500">Cargando tareas...</p>;
-  if (isError) return <p className="text-center text-red-500">Error al cargar tareas.</p>;
-  if (!tasks?.length) return <p className="text-center text-gray-400">No hay tareas todavía.</p>;
+  if (isLoading)
+    return <p className="text-center text-gray-500">Cargando tareas...</p>;
+  if (isError)
+    return <p className="text-center text-red-500">Error al cargar tareas.</p>;
+  if (!tasks?.length)
+    return <p className="text-center text-gray-400">No hay tareas todavía.</p>;
 
   return (
-<div
+    <div
       className="
-        relative min-h-screen py-10
+        relative z-0 min-h-screen py-10
         bg-gradient-to-br from-white via-indigo-50/30 to-purple-50/40
+        overflow-visible
       "
     >
       {/* Fondo con patrón sutil */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-5 pointer-events-none"
+        className="absolute inset-0 w-full h-full opacity-5 pointer-events-none z-0"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <pattern
-          id="grid"
-          width="100"
-          height="100"
-          patternUnits="userSpaceOnUse"
-        >
+        <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
           <rect
             width="100"
             height="100"
@@ -47,7 +55,7 @@ export function TaskList() {
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
 
-      <div className="relative z-10 max-w-6xl mx-auto space-y-12">
+      <div className="relative z-[2] max-w-6xl mx-auto space-y-12">
         {/* Botón principal IA */}
         <div className="flex justify-center">
           <button
@@ -82,4 +90,5 @@ export function TaskList() {
     </div>
   );
 }
+
 

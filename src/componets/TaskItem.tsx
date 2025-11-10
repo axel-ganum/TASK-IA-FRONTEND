@@ -4,6 +4,7 @@ import { Button } from "../utils/button";
 
 import { useTasks } from '../hooks/useTasks';
 import { useState } from 'react';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 interface Props {
   task: Task;
@@ -25,24 +26,26 @@ const handleAnalyze = async () => {
     const match = content.match(/```json([\s\S]*?)```/);
     if (match) content = match[1].trim();
 
-    // 🔹 Intentar parsear limpiando múltiples niveles de escape
+    // 🔹 Intentar parsear con mayor tolerancia
     let parsed;
-    for (let i = 0; i < 3; i++) {
-      try {
+
+    try {
+      // Si parece JSON directo
+      if (content.trim().startsWith("{") && content.trim().endsWith("}")) {
         parsed = JSON.parse(content);
-        break; // ✅ Si lo logra, salimos del bucle
-      } catch {
-        // limpiar caracteres escapados y comillas redundantes
-        content = content
-          .replace(/^"|"$/g, "") // comillas al inicio y fin
-          .replace(/\\n/g, "\n")
-          .replace(/\\"/g, '"')
-          .replace(/\\\\/g, "\\");
+      } else {
+        // Si el JSON viene dentro de texto
+        const matchJson = content.match(/\{[\s\S]*\}/);
+        if (matchJson) {
+          parsed = JSON.parse(matchJson[0]);
+        }
       }
+    } catch (err) {
+      console.warn("No se pudo parsear JSON:", err);
     }
 
-    // 🔹 Si no se pudo parsear, mostrar el texto limpio
-    if (!parsed) {
+    // 🔹 Si no se pudo parsear, mostrar texto plano
+    if (!parsed || typeof parsed !== "object") {
       parsed = {
         insights: content,
         suggestions: "No se pudo formatear correctamente el análisis.",
@@ -56,18 +59,15 @@ const handleAnalyze = async () => {
   }
 };
 
-
-
-
   return (
 
    <div
       className="
-        flex flex-col justify-between
-        bg-white/70 backdrop-blur-xl border border-white/40
-        rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1
-        transition-all duration-300 ease-out
-        text-gray-800 overflow-hidden p-5 w-full max-w-sm
+        flex flex-col justify-start space-y-3
+       bg-white/70 backdrop-blur-xl border border-white/40
+       rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1
+       transition-all duration-300 ease-out
+       text-gray-800 overflow-hidden p-5 w-full max-w-sm
       "
     >
       {/* Encabezado */}
@@ -163,37 +163,33 @@ const handleAnalyze = async () => {
       </div>
 
       {/* Modal de análisis */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <div className="text-indigo-700 text-lg font-bold">
-              <DialogTitle>
-                💡 Análisis de la tarea
-              </DialogTitle>
-            </div>
-          </DialogHeader>
+    <Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto z-[9999]">
+    <DialogHeader>
+      <DialogTitle>💡 Análisis de la tarea</DialogTitle>
+      <DialogDescription>
+        Resultados generados por la IA según la tarea seleccionada.
+      </DialogDescription>
+    </DialogHeader>
 
-          {analysis ? (
-            <div className="space-y-4 text-[15px] leading-relaxed text-gray-800">
-              <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
-                <p className="font-semibold text-indigo-700 mb-1">💭 Insights:</p>
-                <p className="whitespace-pre-line text-gray-700">
-                  {analysis.insights || "No hay insights"}
-                </p>
-              </div>
+    <div className="space-y-4 text-[15px] leading-relaxed text-gray-800">
+      <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
+        <p className="font-semibold text-indigo-700 mb-1">💭 Insights:</p>
+        <p className="whitespace-pre-line text-gray-700">
+          {analysis.insights || "No hay insights"}
+        </p>
+      </div>
 
-              <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
-                <p className="font-semibold text-purple-700 mb-1">🧭 Sugerencias:</p>
-                <p className="whitespace-pre-line text-gray-700">
-                  {analysis.suggestions || "No hay sugerencias"}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <p className="text-gray-500 italic">Analizando con IA...</p>
-          )}
-        </DialogContent>
-      </Dialog>
+      <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
+        <p className="font-semibold text-purple-700 mb-1">🧭 Sugerencias:</p>
+        <p className="whitespace-pre-line text-gray-700">
+          {analysis.suggestions || "No hay sugerencias"}
+        </p>
+      </div>
+    </div>
+  </DialogContent>
+</Dialog>
+
     </div>
   );
 }
