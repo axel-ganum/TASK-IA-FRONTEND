@@ -93,24 +93,39 @@ const [summaryText, setSummaryText] = useState("");
           ))}
         </div>
       </div>
-      {summaryModalOpen && (
-   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999]">
-    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-2xl w-full mx-4">
-      <h2 className="text-xl font-semibold mb-4">🧾 Resumen de tareas</h2>
-      <pre className="whitespace-pre-wrap text-gray-700 max-h-[70vh] overflow-y-auto">
-        {summaryText}
-      </pre>
-      <div className="mt-6 flex justify-end">
+     {summaryModalOpen && (
+  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[999] p-4">
+    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl relative overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          🧾 Resumen de tareas
+        </h2>
         <button
           onClick={() => setSummaryModalOpen(false)}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+          className="text-white hover:text-gray-200 text-2xl leading-none"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Contenido */}
+      <div className="p-6 max-h-[70vh] overflow-y-auto text-gray-700 whitespace-pre-wrap leading-relaxed">
+        {summaryText}
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-gray-100 px-6 py-4 flex justify-end bg-gray-50">
+        <button
+          onClick={() => setSummaryModalOpen(false)}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition font-medium shadow-sm"
         >
           Cerrar
         </button>
       </div>
     </div>
   </div>
- )}
+)}
 
     </div>
     
