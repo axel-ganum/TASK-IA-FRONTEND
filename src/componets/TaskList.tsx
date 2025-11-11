@@ -1,27 +1,33 @@
 import { TaskItem } from './TaskItem';
 import { useTasks } from '../hooks/useTasks';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 export function TaskList() {
   const { tasks, isLoading, isError, summarize } = useTasks();
+  const [summaryModalOpen, setSummaryModalOpen] = useState(false);
+const [summaryText, setSummaryText] = useState("");
+
 
   const handleSummarize = async () => {
-    try {
-      const result = await summarize.mutateAsync();
-      console.log("🧠 Resultado del resumen:", result);
+  try {
+    const result = await summarize.mutateAsync();
+    console.log("🧠 Resultado del resumen:", result);
 
-      const summary =
-        result?.summary ||
-        result?.result ||
-        result?.message ||
-        JSON.stringify(result, null, 2);
+    const summary =
+      result?.summary ||
+      result?.result ||
+      result?.message ||
+      JSON.stringify(result, null, 2);
 
-      toast.success(`🧾 Resumen generado con IA\n${summary}`);
-    } catch (error) {
-      console.error("Error al resumir tareas:", error);
-      toast.error("Error al resumir tareas");
-    }
-  };
+    setSummaryText(summary);
+    setSummaryModalOpen(true);
+  } catch (error) {
+    console.error("Error al resumir tareas:", error);
+    toast.error("Error al resumir tareas");
+  }
+};
+
 
   if (isLoading)
     return <p className="text-center text-gray-500">Cargando tareas...</p>;
@@ -87,7 +93,27 @@ export function TaskList() {
           ))}
         </div>
       </div>
+      {summaryModalOpen && (
+   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999]">
+    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-2xl w-full mx-4">
+      <h2 className="text-xl font-semibold mb-4">🧾 Resumen de tareas</h2>
+      <pre className="whitespace-pre-wrap text-gray-700 max-h-[70vh] overflow-y-auto">
+        {summaryText}
+      </pre>
+      <div className="mt-6 flex justify-end">
+        <button
+          onClick={() => setSummaryModalOpen(false)}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+        >
+          Cerrar
+        </button>
+      </div>
     </div>
+  </div>
+ )}
+
+    </div>
+    
   );
 }
 
