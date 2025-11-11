@@ -5,6 +5,7 @@ import { Button } from "../utils/button";
 import { useTasks } from '../hooks/useTasks';
 import { useState } from 'react';
 import { DialogDescription } from '@radix-ui/react-dialog';
+import { toast } from 'react-toastify';
 
 interface Props {
   task: Task;
@@ -18,33 +19,44 @@ const [analysis, setAnalysis] = useState<{ insights?: string; suggestions?: stri
 
  
 const handleAnalyze = async () => {
-  try {
+ try {
     const result = await analyze.mutateAsync(task.id);
     let content = typeof result === "string" ? result : JSON.stringify(result);
 
-    // 🔹 Si viene envuelto en ```json ... ```
+    // Si viene envuelto en ```json ... ```
     const match = content.match(/```json([\s\S]*?)```/);
     if (match) content = match[1].trim();
 
-    // 🔹 Intentar parsear con mayor tolerancia
-    let parsed;
+    let parsed = null;
 
-    try {
-      // Si parece JSON directo
-      if (content.trim().startsWith("{") && content.trim().endsWith("}")) {
+    // 🔹 Intentar parsear varias veces limpiando el texto progresivamente
+    for (let i = 0; i < 3; i++) {
+      try {
         parsed = JSON.parse(content);
-      } else {
-        // Si el JSON viene dentro de texto
-        const matchJson = content.match(/\{[\s\S]*\}/);
-        if (matchJson) {
-          parsed = JSON.parse(matchJson[0]);
-        }
+        break; // ✅ Si parsea bien, salimos
+      } catch {
+        content = content
+          .replace(/^"|"$/g, "") // quitar comillas exteriores
+          .replace(/\\n/g, "\n") // saltos reales
+          .replace(/\\"/g, '"') // desescapar comillas
+          .replace(/\\\\/g, "\\") // dobles barras
+          .trim();
       }
-    } catch (err) {
-      console.warn("No se pudo parsear JSON:", err);
     }
 
-    // 🔹 Si no se pudo parsear, mostrar texto plano
+    // Si todavía no logró parsear, intentar extraer bloque { ... }
+    if (!parsed) {
+      const jsonBlock = content.match(/\{[\s\S]*\}/);
+      if (jsonBlock) {
+        try {
+          parsed = JSON.parse(jsonBlock[0]);
+        } catch {
+          parsed = null;
+        }
+      }
+    }
+
+    // 🔹 Fallback si sigue sin parsear
     if (!parsed || typeof parsed !== "object") {
       parsed = {
         insights: content,
@@ -52,10 +64,16 @@ const handleAnalyze = async () => {
       };
     }
 
-    setAnalysis(parsed);
+    // 🔹 Limpieza final de \n en insights y suggestions
+    setAnalysis({
+      insights: parsed.insights?.replace(/\\n/g, "\n"),
+      suggestions: parsed.suggestions?.replace(/\\n/g, "\n"),
+    });
+
     setOpen(true);
   } catch (error) {
-    console.error("Error al analizar la tarea:", error);
+    console.error("❌ Error al analizar la tarea:", error);
+    toast.error("Error al analizar la tarea");
   }
 };
 
