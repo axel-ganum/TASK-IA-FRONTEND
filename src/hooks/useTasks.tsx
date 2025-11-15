@@ -24,7 +24,13 @@ export function useTasks() {
   // 2️⃣ Crear tarea con IA
   const createTask = useMutation({
     mutationFn: createTaskWithAI,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: (error) => {
+      console.error('Error al crear tarea:', error);
+      // Aquí podrías agregar notificaciones o manejo de errores
+    }
   });
 
   // 3️⃣ Eliminar tarea

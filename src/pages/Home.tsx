@@ -1,44 +1,102 @@
+import { useState } from 'react';
 import { TaskForm } from '../componets/TaskForm';
 import { TaskList } from '../componets/TaskList';
 
-// ✅ Home.tsx
-
 export function Home() {
+  const [showTaskForm, setShowTaskForm] = useState(false);
+
   return (
-     <main className="relative min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
-      {/* Fondo con patrón sutil */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10 pointer-events-none"></div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-indigo-700 flex items-center gap-2 mb-1">
+            <span className="bg-indigo-100 p-2 rounded-lg">📝</span>
+            Task IA
+          </h1>
+          <p className="text-sm text-gray-500">Organiza tus tareas con IA</p>
+        </div>
 
-      {/* Efecto de luz suave */}
-      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-indigo-300/20 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-300/30 blur-[150px] rounded-full"></div>
-
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 space-y-12">
-        <header className="flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div>
-            <h1 className="text-4xl font-extrabold text-indigo-700 tracking-tight drop-shadow-sm">
-              🧠 Task IA
-            </h1>
-            <p className="text-gray-600 text-sm sm:text-base mt-1">
-              Organiza, analiza y mejora tus tareas con inteligencia artificial.
-            </p>
-          </div>
-
-          <button
-            className="
-              bg-gradient-to-r from-indigo-600 to-purple-600 
-              text-white px-6 py-3 rounded-xl font-semibold 
-              shadow-md hover:shadow-lg hover:opacity-90 
-              transition-all duration-300
-            "
-          >
-            + Nueva Tarea
+        <nav className="space-y-1">
+          <button className="w-full text-left px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700 font-medium flex items-center gap-3">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Todas las tareas
           </button>
-        </header>
+          <button className="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-3">
+            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Hoy
+          </button>
+          <button className="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-3">
+            <svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Próximas
+          </button>
+          <button className="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-3">
+            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Completadas
+          </button>
+        </nav>
 
-        <TaskForm />
-        <TaskList />
+        <div className="mt-8">
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">Categorías</h3>
+          <div className="space-y-1">
+            <button className="w-full text-left px-4 py-2 text-sm rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-indigo-500"></span>
+              Trabajo
+            </button>
+            <button className="w-full text-left px-4 py-2 text-sm rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-green-500"></span>
+              Personal
+            </button>
+            <button className="w-full text-left px-4 py-2 text-sm rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+              Estudio
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <header className="header bg-transparent border-0 sticky top-0 z-10 pt-6 pb-2 px-0">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Mis Tareas</h2>
+                <p className="text-sm text-gray-500">Gestiona y organiza tus tareas diarias</p>
+              </div>
+              <button 
+                onClick={() => setShowTaskForm(!showTaskForm)}
+                className="btn btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Nueva Tarea
+              </button>
+            </div>
+          </header>
+
+          <div className="mt-6">
+            {showTaskForm && (
+              <div className="fade-in mb-6">
+                <TaskForm onClose={() => setShowTaskForm(false)} />
+              </div>
+            )}
+            
+            <div className="w-full">
+              <TaskList />
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

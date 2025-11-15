@@ -1,70 +1,192 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --border: #e5e7eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
 html {
-  font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-
-h1, h2, h3 {
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: #0f172a; /* text-slate-900 */
-}
-
-p, li, span {
-  font-weight: 400;
-  line-height: 1.6;
-  color: #334155; /* text-slate-700 */
-}
-
-button {
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-/* === Efectos visuales sutiles === */
-.card {
-  @apply bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200;
-}
-
-.text-muted {
-  @apply text-slate-500;
-}
-
-.text-accent {
-  @apply text-indigo-600;
-}
-
-/* === Scrollbar minimalista === */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* slate-300 */
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8; /* slate-400 */
-}
-
-/* === Animaciones suaves === */
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-primary);
 }
 
 body {
-  background-color: #f8fafc; /* slate-50 */
+  @apply bg-gray-50 min-h-screen;
+}
+
+/* Tipografía */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold text-gray-900;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h1 { @apply text-2xl md:text-3xl; }
+h2 { @apply text-xl md:text-2xl; }
+h3 { @apply text-lg md:text-xl; }
+
+p, li, span {
+  @apply text-gray-700 leading-relaxed;
+}
+
+/* Botones */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2;
+}
+
+.btn-primary {
+  @apply bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800;
+}
+
+.btn-outline {
+  @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100;
+}
+
+/* Tarjetas */
+.card {
+  @apply bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md mx-0 w-full;
+  max-width: 100%;
+}
+
+/* Asegurar que las tarjetas no se salgan en móviles */
+@media (max-width: 640px) {
+  .card {
+    @apply rounded-lg;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    width: calc(100% + 1rem);
+  }
+}
+
+/* Inputs */
+.input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200;
+}
+
+/* Tareas */
+.task-item {
+  @apply px-4 py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors duration-150 flex items-start gap-3;
+  margin: 0 -0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 640px) {
+  .task-item {
+    @apply px-3 py-3;
+    margin: 0 -0.5rem;
+  }
+}
+
+.task-checkbox {
+  @apply h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mt-0.5;
+}
+
+.task-title {
+  @apply font-medium text-gray-900 flex-1;
+}
+
+.task-description {
+  @apply text-sm text-gray-500 mt-1;
+}
+
+.task-due-date {
+  @apply text-xs text-gray-400 flex items-center gap-1 mt-1;
+}
+
+.task-priority {
+  @apply text-xs font-medium px-2 py-0.5 rounded-full;
+}
+
+.priority-high { @apply bg-red-100 text-red-800; }
+.priority-medium { @apply bg-yellow-100 text-yellow-800; }
+.priority-low { @apply bg-blue-100 text-blue-800; }
+
+/* Barra lateral */
+.sidebar {
+  @apply bg-white border-r border-gray-200 w-64 fixed h-screen p-4 hidden md:block;
+}
+
+/* Contenido principal */
+.main-content {
+  @apply md:ml-64 p-4 md:px-8 md:py-6 max-w-6xl w-full mx-auto;
+  min-height: calc(100vh - 4rem);
+}
+
+/* Asegurar que el contenido no se salga en móviles */
+@media (max-width: 767px) {
+  .main-content {
+    @apply px-4 py-4;
+  }
+  
+  .task-item {
+    @apply px-3 py-3;
+  }
+}
+
+/* Header */
+.header {
+  @apply bg-white border-b border-gray-200 sticky top-0 z-10 p-4;
+}
+
+/* Estado de completado */
+.completed {
+  @apply opacity-60;
+}
+
+.completed .task-title {
+  @apply line-through text-gray-400;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a5b4fc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    @apply p-3;
+  }
+  
+  .task-item {
+    @apply p-3;
+  }
 }
