@@ -1,12 +1,11 @@
 
 
 import { useState } from 'react';
-import { DialogDescription } from '@radix-ui/react-dialog';
 import { toast } from 'react-toastify';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { Task } from '../types/Task';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../utils/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../utils/dialog";
 import { Button } from "../utils/button";
 import { useTasks } from '../hooks/useTasks';
 
@@ -260,56 +259,70 @@ export function TaskItem({ task }: Props) {
 
       {/* MODAL: DESCRIPCIÓN COMPLETA */}
       <Dialog open={openDescription} onOpenChange={setOpenDescription}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Descripción completa</DialogTitle>
-            <DialogDescription>
-              Vista ampliada del contenido de la tarea.
-            </DialogDescription>
-          </DialogHeader>
+  <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto z-[9999]">
+    <DialogHeader>
+      <DialogTitle>Descripción completa</DialogTitle>
+      <DialogDescription className="text-gray-600">
+        Vista ampliada del contenido de la tarea.
+      </DialogDescription>
+    </DialogHeader>
 
-          <div className="prose max-w-none text-sm mt-3">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {task.description || ''}
-            </ReactMarkdown>
-          </div>
-        </DialogContent>
-      </Dialog>
+    <div className="prose max-w-none text-sm mt-3">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {task.description || 'Sin descripción'}
+      </ReactMarkdown>
+    </div>
+  </DialogContent>
+</Dialog>
 
       {/* MODAL: ANÁLISIS IA */}
       <Dialog open={openAnalysis} onOpenChange={setOpenAnalysis}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Análisis de la tarea</DialogTitle>
-            <DialogDescription>
-              Resultados generados automáticamente.
+        <DialogContent className="w-[90vw] max-w-2xl max-h-[90vh] flex flex-col p-0 overflow-hidden">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              Análisis de la tarea
+            </DialogTitle>
+            <DialogDescription className="text-gray-600">
+              Análisis generado por IA para: <span className="font-medium">{task.title}</span>
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-4 space-y-4 text-sm text-gray-700">
-            {analysis.insights && (
-              <div>
-                <h4 className="font-semibold mb-1 text-gray-900">📌 Insights</h4>
-                <pre className="whitespace-pre-wrap bg-gray-50 p-3 rounded-lg border text-gray-800 text-xs">
-                  {analysis.insights}
-                </pre>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+            <div className="bg-blue-50/50 p-5 rounded-lg border border-blue-100">
+              <h4 className="flex items-center gap-2 text-lg font-medium text-blue-800 mb-3">
+                <span className="text-xl">🔍</span> Insights
+              </h4>
+              <div className="prose prose-sm max-w-none text-gray-700">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {analysis.insights || 'No hay insights disponibles'}
+                </ReactMarkdown>
               </div>
-            )}
+            </div>
 
-            {analysis.suggestions && (
-              <div>
-                <h4 className="font-semibold mb-1 text-gray-900">💡 Sugerencias</h4>
-                <pre className="whitespace-pre-wrap bg-gray-50 p-3 rounded-lg border text-gray-800 text-xs">
-                  {analysis.suggestions}
-                </pre>
+            <div className="bg-purple-50/50 p-5 rounded-lg border border-purple-100">
+              <h4 className="flex items-center gap-2 text-lg font-medium text-purple-800 mb-3">
+                <span className="text-xl">💡</span> Sugerencias
+              </h4>
+              <div className="prose prose-sm max-w-none text-gray-700">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {analysis.suggestions || 'No hay sugerencias disponibles'}
+                </ReactMarkdown>
               </div>
-            )}
+            </div>
+          </div>
+
+          <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-3">
+            <Button 
+              variant="outline" 
+              onClick={() => setOpenAnalysis(false)}
+              className="px-4"
+            >
+              Cerrar
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
+   
     </div>
   );
 }
-
-
-

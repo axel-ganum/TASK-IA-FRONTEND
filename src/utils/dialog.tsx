@@ -28,7 +28,30 @@ export const DialogContent = ({ children, className }: DialogContentProps) => (
   </DialogPrimitive.Portal>
 );
 
-export const DialogHeader = ({ children }: { children: React.ReactNode }) => <div className="mb-4">{children}</div>;
-export const DialogTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-lg font-semibold text-gray-800">{children}</h2>
+export const DialogHeader = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <div className={`mb-4 ${className}`}>{children}</div>
 );
+export const DialogTitle = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  <DialogPrimitive.Title className={`text-lg font-semibold text-gray-800 ${className || ''}`}>
+    {children}
+  </DialogPrimitive.Title>
+);
+
+interface DialogDescriptionProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const DialogDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  DialogDescriptionProps
+>(({ className, children, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={`text-sm text-gray-600 ${className || ''}`}
+    {...props}
+  >
+    {children}
+  </DialogPrimitive.Description>
+));
+DialogDescription.displayName = 'DialogDescription';

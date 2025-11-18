@@ -1,7 +1,7 @@
 import type { ReactNode, ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
 
-type Variant = "default" | "outline" | "link";
+type Variant = "default" | "outline" | "link" | "ghost";
 type Color = "blue" | "red" | "purple" | "green" | "gray";
 
 type ButtonProps = {
@@ -34,6 +34,7 @@ export function Button({
     outline:
       "border border-current bg-transparent text-current hover:bg-blue-50",
     link: "bg-transparent underline-offset-2 hover:underline p-0 h-auto shadow-none",
+    ghost: "bg-transparent hover:bg-gray-100",
   };
 
   return (
