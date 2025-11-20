@@ -83,6 +83,23 @@ export function TaskItem({ task }: Props) {
     }
   };
 
+  const priority = (task.priority || "").toString().trim().toLowerCase();
+
+const priorityLabel =
+  priority === "high" || priority === "urgent" || priority === "alta"
+    ? "🔥 Alta"
+    : priority === "medium" || priority === "media"
+    ? "⚠️ Media"
+    : "🐢 Baja";
+
+const priorityColor =
+  priority === "high" || priority === "urgent" || priority === "alta"
+    ? "bg-red-100 text-red-800"
+    : priority === "medium" || priority === "media"
+    ? "bg-yellow-100 text-yellow-800"
+    : "bg-green-100 text-green-800";
+
+
   return (
     <div
       className="
@@ -141,19 +158,9 @@ export function TaskItem({ task }: Props) {
         </span>
 
         <span
-          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-            task.priority === 'high' || task.priority === 'urgent'
-              ? 'bg-red-100 text-red-800'
-              : task.priority === 'medium'
-              ? 'bg-yellow-100 text-yellow-800'
-              : 'bg-green-100 text-green-800'
-          }`}
-        >
-          {task.priority === 'high' || task.priority === 'urgent'
-            ? '🔥 Alta'
-            : task.priority === 'medium'
-            ? '⚠️ Media'
-            : '🐢 Baja'}
+           className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColor}`}
+>
+            {priorityLabel}
         </span>
 
         {task.dueDate && (
