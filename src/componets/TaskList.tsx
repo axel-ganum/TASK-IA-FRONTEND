@@ -155,15 +155,11 @@ export function TaskList() {
 
       {/* Lista de tareas */}
       {filteredTasks.length > 0 ? (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <div className="w-full space-y-4">
-            {filteredTasks.map((task) => (
-              <div key={task.id} className="w-full">
-                <TaskItem task={task} />
-              </div>
-            ))}
-          </div>
-        </div>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {filteredTasks.map((task) => (
+    <TaskItem key={task.id} task={task} />
+  ))}
+</div>
       ) : (
         <div className="text-center py-12 bg-white rounded-lg shadow">
           <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

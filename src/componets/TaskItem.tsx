@@ -178,7 +178,7 @@ const priorityColor =
       {/* DESCRIPCIÓN RESUMIDA */}
       {task.description && (
         <div className="mt-1 text-sm text-gray-700">
-          <div className="line-clamp-3 prose max-w-none">
+          <div className="max-h-28 overflow-hidden prose max-w-none">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {task.description}
             </ReactMarkdown>
@@ -212,7 +212,7 @@ const priorityColor =
         <div className="border-t border-gray-100 pt-3 mt-auto">
           <ul className="space-y-1 text-sm text-gray-700">
             {task.subtasks.map((sub) => (
-              <li key={sub.id} className="flex justify-between items-center">
+              <li key={sub.id} className="fflex justify-between items-center bg-gray-50 px-2 py-1 rounded-md border">
                 <span className="truncate">
                   {sub.completed ? '✅' : '🕓'} {sub.title}
                 </span>
@@ -244,7 +244,7 @@ const priorityColor =
       )}
 
       {/* BOTONES DE ACCIÓN */}
-      <div className="mt-4 flex justify-end gap-3 text-xs font-medium">
+      <div className="mt-4 flex justify-end gap-3 flex-wrap text-xs font-medium">
         <Button
           variant="link"
           onClick={() => generateSubtasks.mutate(task.id)}
