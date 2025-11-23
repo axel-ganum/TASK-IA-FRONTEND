@@ -244,4 +244,4 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
       </div>
     </div>
   );
-}
+} 

@@ -176,84 +176,50 @@ const priorityColor =
       </div>
 
       {/* DESCRIPCIÓN RESUMIDA */}
-      {task.description && (
-        <div className="mt-1 text-sm text-gray-700">
-          <div className="max-h-28 overflow-hidden prose max-w-none">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {task.description}
-            </ReactMarkdown>
-          </div>
+   {/* SUBTAREAS (versión resumida en la tarjeta) */}
+{task.subtasks?.length > 0 && (
+  <div className="border-t border-gray-100 pt-3">
+    <ul className="space-y-1 text-sm text-gray-700">
+      {task.subtasks.slice(0, 2).map((sub) => (
+        <li
+          key={sub.id}
+          className="flex justify-between items-center bg-gray-50 px-2 py-1 rounded-md border"
+        >
+          <span className="truncate">
+            {sub.completed ? "✅" : "🕓"} {sub.title}
+          </span>
 
-          <button
-            className="text-xs text-gray-500 hover:underline mt-1"
-            onClick={() => setOpenDescription(true)}
-          >
-            Ver más
-          </button>
-        </div>
-      )}
-
-      {/* TAGS */}
-      {task.tags?.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {task.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full"
+          <div className="flex gap-2 text-xs">
+            <button
+              onClick={() =>
+                updateSubtaskMutation.mutate({
+                  subtaskId: sub.id,
+                  updates: { completed: !sub.completed },
+                })
+              }
+              className="text-blue-600 hover:underline"
             >
-              {tag}
-            </span>
-          ))}
-        </div>
+              {sub.completed ? "Pendiente" : "Hecho"}
+            </button>
+          </div>
+        </li>
+      ))}
+
+      {/* Si hay más de 2 subtareas → mostrar botón */}
+      {task.subtasks.length > 2 && (
+        <button
+          className="text-xs text-gray-500 hover:underline mt-1"
+          onClick={() => setOpenDescription(true)}
+        >
+          Ver todas las subtareas →
+        </button>
       )}
-
-      {/* SUBTAREAS */}
-      {task.subtasks?.length > 0 && (
-        <div className="border-t border-gray-100 pt-3 mt-auto">
-          <ul className="space-y-1 text-sm text-gray-700">
-            {task.subtasks.map((sub) => (
-              <li key={sub.id} className="fflex justify-between items-center bg-gray-50 px-2 py-1 rounded-md border">
-                <span className="truncate">
-                  {sub.completed ? '✅' : '🕓'} {sub.title}
-                </span>
-
-                <div className="flex gap-2 text-xs">
-                  <button
-                    onClick={() =>
-                      updateSubtaskMutation.mutate({
-                        subtaskId: sub.id,
-                        updates: { completed: !sub.completed },
-                      })
-                    }
-                    className="text-blue-600 hover:underline"
-                  >
-                    {sub.completed ? 'Pendiente' : 'Hecho'}
-                  </button>
-
-                  <button
-                    onClick={() => deleteSubtaskMutation.mutate(sub.id)}
-                    className="text-red-600 hover:underline"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+    </ul>
+  </div>
+)}
 
       {/* BOTONES DE ACCIÓN */}
       <div className="mt-4 flex justify-end gap-3 flex-wrap text-xs font-medium">
-        <Button
-          variant="link"
-          onClick={() => generateSubtasks.mutate(task.id)}
-          disabled={generateSubtasks.isPending}
-          className="text-green-600 hover:underline"
-        >
-          {generateSubtasks.isPending ? '...' : 'Generar subtareas'}
-        </Button>
-
         <Button
           variant="link"
           onClick={handleAnalyze}
@@ -264,23 +230,76 @@ const priorityColor =
         </Button>
       </div>
 
-      {/* MODAL: DESCRIPCIÓN COMPLETA */}
-      <Dialog open={openDescription} onOpenChange={setOpenDescription}>
-  <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto z-[9999]">
+     {/* MODAL: DETALLE COMPLETO (descripción + subtareas) */}
+<Dialog open={openDescription} onOpenChange={setOpenDescription}>
+  <DialogContent className="fixed z-[999999] max-w-lg max-h-[80vh] overflow-y-auto bg-white rounded-xl shadow-xl mt-10">
     <DialogHeader>
-      <DialogTitle>Descripción completa</DialogTitle>
+      <DialogTitle>{task.title}</DialogTitle>
       <DialogDescription className="text-gray-600">
-        Vista ampliada del contenido de la tarea.
+        Descripción completa y subtareas.
       </DialogDescription>
     </DialogHeader>
 
+    {/* DESCRIPCIÓN */}
     <div className="prose max-w-none text-sm mt-3">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {task.description || 'Sin descripción'}
+        {task.description || "Sin descripción"}
       </ReactMarkdown>
     </div>
+
+    {/* SUBTAREAS COMPLETAS */}
+    <div className="mt-5">
+      <h3 className="text-sm font-semibold mb-2">Subtareas</h3>
+
+      <ul className="space-y-2">
+        {task.subtasks?.map((sub) => (
+          <li
+            key={sub.id}
+            className="flex justify-between items-center bg-gray-50 p-2 rounded-lg border text-sm"
+          >
+            <span>
+              {sub.completed ? "✅" : "🕓"} {sub.title}
+            </span>
+
+            <div className="flex gap-2 text-xs">
+              <button
+                onClick={() =>
+                  updateSubtaskMutation.mutate({
+                    subtaskId: sub.id,
+                    updates: { completed: !sub.completed },
+                  })
+                }
+                className="text-blue-600 hover:underline"
+              >
+                {sub.completed ? "Pendiente" : "Hecho"}
+              </button>
+
+              <button
+                onClick={() => deleteSubtaskMutation.mutate(sub.id)}
+                className="text-red-600 hover:underline"
+              >
+                Eliminar
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* CREAR SUBTAREAS */}
+   <div className="mt-4 flex justify-end gap-3 flex-wrap text-xs font-medium">
+  <Button
+    variant="link"
+    onClick={() => generateSubtasks.mutate(task.id)}
+    className="text-purple-600 hover:underline"
+  >
+    Generar subtareas con IA
+  </Button>
+</div>
+
   </DialogContent>
 </Dialog>
+
 
       {/* MODAL: ANÁLISIS IA */}
       <Dialog open={openAnalysis} onOpenChange={setOpenAnalysis}>
