@@ -4,6 +4,8 @@ import { TaskList } from '../componets/TaskList';
 
 export function Home() {
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [section, setSection] = useState<'all' | 'today' | 'upcoming' | 'completed'>('all');
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -18,30 +20,77 @@ export function Home() {
         </div>
 
         <nav className="space-y-1">
-          <button className="w-full text-left px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700 font-medium flex items-center gap-3">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            Todas las tareas
-          </button>
-          <button className="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-3">
-            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Hoy
-          </button>
-          <button className="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-3">
-            <svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Próximas
-          </button>
-          <button className="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-3">
-            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            Completadas
-          </button>
+        <button
+  onClick={() => setSection('all')}
+  className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3
+    ${section === 'all' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}
+  `}
+>
+  <svg
+    className="w-5 h-5 text-indigo-500"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M5 6h14M5 12h14M5 18h14"
+    />
+  </svg>
+  Todas las tareas
+</button>
+
+{/* HOY */}
+<button
+  onClick={() => setSection('today')}
+  className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3
+    ${section === 'today' ? 'bg-red-50 text-red-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}
+  `}
+>
+  <svg
+    className="w-5 h-5 text-red-500"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+    />
+  </svg>
+  Hoy
+</button>
+
+{/* COMPLETADAS */}
+<button
+  onClick={() => setSection('completed')}
+  className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3
+    ${section === 'completed' ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}
+  `}
+>
+  <svg
+    className="w-5 h-5 text-green-500"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M5 13l4 4L19 7"
+    />
+  </svg>
+  Completadas
+</button>
+
         </nav>
 
         <div className="mt-8">
@@ -92,7 +141,7 @@ export function Home() {
             )}
             
             <div className="w-full">
-              <TaskList />
+              <TaskList filter={section} />
             </div>
           </div>
         </div>

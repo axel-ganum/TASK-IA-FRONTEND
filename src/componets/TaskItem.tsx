@@ -137,25 +137,16 @@ const priorityColor =
 
       {/* ESTADO Y PRIORIDAD */}
       <div className="flex items-center gap-2 mb-2 text-sm">
-        <span
-          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-            task.status === 'completed'
-              ? 'bg-green-100 text-green-800'
-              : task.status === 'in-progress'
-              ? 'bg-blue-100 text-blue-800'
-              : task.status === 'blocked'
-              ? 'bg-red-100 text-red-800'
-              : 'bg-gray-100 text-gray-800'
-          }`}
-        >
-          {task.status === 'completed'
-            ? '✓ Completada'
-            : task.status === 'in-progress'
-            ? '🔄 En progreso'
-            : task.status === 'blocked'
-            ? '⛔ Bloqueada'
-            : '📝 Pendiente'}
-        </span>
+       <span
+  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+    task.completed
+      ? "bg-green-100 text-green-800"
+      : "bg-gray-100 text-gray-800"
+  }`}
+>
+  {task.completed ? "✓ Completada" : "📝 Pendiente"}
+</span>
+
 
         <span
            className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColor}`}

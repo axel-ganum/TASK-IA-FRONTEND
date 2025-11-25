@@ -3,12 +3,49 @@ import { useTasks } from '../hooks/useTasks';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
-export function TaskList() {
+export function TaskList( { filter }: { filter: 'all' | 'today' | 'upcoming' | 'completed' }) {
   const { tasks, isLoading, isError, summarize } = useTasks();
   const [summaryModalOpen, setSummaryModalOpen] = useState(false);
   const [summaryText, setSummaryText] = useState("");
   const [activeTab, setActiveTab] = useState<'all' | 'completed' | 'pending'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+
+// Filtrar tareas según la pestaña activa + filtro del sidebar
+const filteredBySection = tasks?.filter(task => {
+  if (!task) return false;
+
+  if (filter === 'completed') return task.completed;
+  if (filter === 'today') {
+    return new Date(task.createdAt).toDateString() === new Date().toDateString();
+  }
+  if (filter === 'upcoming') {
+    return new Date(task.createdAt) > new Date();
+  }
+
+  return true; // 'all'
+}) || [];
+
+// Filtrar tareas según la pestaña activa + búsqueda + sección
+const filteredTasks = filteredBySection.filter(task => {
+  if (!task) return false;
+
+  const matchesTab =
+    activeTab === 'all' ||
+    (activeTab === 'completed' && task.completed) ||
+    (activeTab === 'pending' && !task.completed);
+
+  const matchesSearch =
+    task.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (task.description &&
+      task.description.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  return matchesTab && matchesSearch;
+});
+
+
+
+
 
   const handleSummarize = async () => {
     try {
@@ -29,20 +66,7 @@ export function TaskList() {
     }
   };
 
-  // Filtrar tareas según la pestaña activa
-  const filteredTasks = tasks?.filter(task => {
-    if (!task) return false;
-    
-    const matchesTab = 
-      activeTab === 'all' || 
-      (activeTab === 'completed' && task.completed) ||
-      (activeTab === 'pending' && !task.completed);
-    
-    const matchesSearch = task.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    return matchesTab && matchesSearch;
-  }) || [];
+
 
   if (isLoading) {
     return (
