@@ -3,7 +3,7 @@ import { useTasks } from '../hooks/useTasks';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
-export function TaskList( { filter }: { filter: 'all' | 'today' | 'upcoming' | 'completed' }) {
+export function TaskList({ filter }: { filter: 'all' | 'today' | 'upcoming' | 'completed' | 'trabajo' | 'personal' | 'estudio' }) {
   const { tasks, isLoading, isError, summarize } = useTasks();
   const [summaryModalOpen, setSummaryModalOpen] = useState(false);
   const [summaryText, setSummaryText] = useState("");
@@ -22,6 +22,11 @@ const filteredBySection = tasks?.filter(task => {
   if (filter === 'upcoming') {
     return new Date(task.createdAt) > new Date();
   }
+
+   // --- Filtros por categoría ---
+  if (filter === 'trabajo') return task.category === 'trabajo';
+  if (filter === 'personal') return task.category === 'personal';
+  if (filter === 'estudio') return task.category === 'estudio';
 
   return true; // 'all'
 }) || [];

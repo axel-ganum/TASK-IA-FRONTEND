@@ -4,7 +4,7 @@ import { TaskList } from '../componets/TaskList';
 
 export function Home() {
   const [showTaskForm, setShowTaskForm] = useState(false);
-  const [section, setSection] = useState<'all' | 'today' | 'upcoming' | 'completed'>('all');
+  const [section, setSection] = useState<'all' | 'today' | 'upcoming' | 'completed'| 'trabajo' | 'personal' | 'estudio'>('all');
 
 
   return (
@@ -94,21 +94,52 @@ export function Home() {
         </nav>
 
         <div className="mt-8">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">Categorías</h3>
-          <div className="space-y-1">
-            <button className="w-full text-left px-4 py-2 text-sm rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-indigo-500"></span>
-              Trabajo
-            </button>
-            <button className="w-full text-left px-4 py-2 text-sm rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-green-500"></span>
-              Personal
-            </button>
-            <button className="w-full text-left px-4 py-2 text-sm rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-              Estudio
-            </button>
-          </div>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">
+    Categorías
+  </h3>
+
+  <div className="space-y-1">
+
+    {/* TRABAJO */}
+    <button
+      onClick={() => setSection('trabajo')}
+      className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2
+        ${section === 'trabajo' 
+          ? 'bg-indigo-50 text-indigo-700 font-medium' 
+          : 'text-gray-600 hover:bg-gray-100'}
+      `}
+    >
+      <span className="w-3 h-3 rounded-full bg-indigo-500"></span>
+      Trabajo
+    </button>
+
+    {/* PERSONAL */}
+    <button
+      onClick={() => setSection('personal')}
+      className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2
+        ${section === 'personal' 
+          ? 'bg-green-50 text-green-700 font-medium' 
+          : 'text-gray-600 hover:bg-gray-100'}
+      `}
+    >
+      <span className="w-3 h-3 rounded-full bg-green-500"></span>
+      Personal
+    </button>
+
+    {/* ESTUDIO */}
+    <button
+      onClick={() => setSection('estudio')}
+      className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2
+        ${section === 'estudio' 
+          ? 'bg-yellow-50 text-yellow-700 font-medium' 
+          : 'text-gray-600 hover:bg-gray-100'}
+      `}
+    >
+      <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+      Estudio
+    </button>
+
+  </div>
         </div>
       </aside>
 

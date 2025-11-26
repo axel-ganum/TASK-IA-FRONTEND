@@ -7,6 +7,7 @@ export interface Subtask {
 }
 
 export interface Task {
+  category: string;
   id: string;
   title: string;
   description?: string | null;

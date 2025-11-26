@@ -137,33 +137,56 @@ const priorityColor =
 
       {/* ESTADO Y PRIORIDAD */}
       <div className="flex items-center gap-2 mb-2 text-sm">
-       <span
-  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-    task.completed
-      ? "bg-green-100 text-green-800"
-      : "bg-gray-100 text-gray-800"
-  }`}
->
-  {task.completed ? "✓ Completada" : "📝 Pendiente"}
-</span>
+      <span
+    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+      task.completed
+        ? "bg-green-100 text-green-800"
+        : "bg-gray-100 text-gray-800"
+    }`}
+  >
+    {task.completed ? "✓ Completada" : "📝 Pendiente"}
+  </span>
 
+  {/* Prioridad */}
+  <span
+    className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColor}`}
+  >
+    {priorityLabel}
+  </span>
 
-        <span
-           className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColor}`}
->
-            {priorityLabel}
-        </span>
+  {/* Categoría */}
+  {task.category && (
+    <span
+      className={`
+        px-2 py-0.5 rounded-full text-xs font-medium
+        ${
+          task.category === "trabajo"
+            ? "bg-indigo-100 text-indigo-800"
+            : task.category === "personal"
+            ? "bg-green-100 text-green-800"
+            : task.category === "estudio"
+            ? "bg-yellow-100 text-yellow-800"
+            : "bg-gray-100 text-gray-700"
+        }
+      `}
+    >
+      {task.category === "trabajo" && "💼 Trabajo"}
+      {task.category === "personal" && "🏠 Personal"}
+      {task.category === "estudio" && "📚 Estudio"}
+    </span>
+  )}
 
-        {task.dueDate && (
-          <span className="text-xs text-gray-500">
-            📅{' '}
-            {new Date(task.dueDate).toLocaleDateString('es-ES', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric',
-            })}
-          </span>
-        )}
+  {/* Fecha */}
+  {task.dueDate && (
+    <span className="text-xs text-gray-500">
+      📅{" "}
+      {new Date(task.dueDate).toLocaleDateString("es-ES", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })}
+    </span>
+  )}
       </div>
 
       {/* DESCRIPCIÓN RESUMIDA */}
