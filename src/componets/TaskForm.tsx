@@ -10,6 +10,8 @@ export function TaskForm({ onClose }: TaskFormProps) {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<"high" | "medium" | "low">("medium");
   const [dueDate, setDueDate] = useState("");
+  const [category, setCategory] = useState<"personal" | "trabajo" | "estudio">("personal");
+
   
   const { createTask } = useTasks();
 
@@ -23,7 +25,8 @@ export function TaskForm({ onClose }: TaskFormProps) {
         title: title,
         description: description || '',
         priority: priority,
-        dueDate: dueDate ? new Date(dueDate).toISOString() : null
+        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+        category: category
       };
       
       // Convertir a JSON para enviar al backend
@@ -144,6 +147,49 @@ export function TaskForm({ onClose }: TaskFormProps) {
             </div>
           </div>
           
+        <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Categoría
+  </label>
+
+  <div className="flex space-x-2">
+    <button
+      type="button"
+      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+        category === "personal"
+          ? "bg-green-100 text-green-800"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      }`}
+      onClick={() => setCategory("personal")}
+    >
+      🏠 Personal
+    </button>
+
+    <button
+      type="button"
+      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+        category === "trabajo"
+          ? "bg-indigo-100 text-indigo-800"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      }`}
+      onClick={() => setCategory("trabajo")}
+    >
+      💼 Trabajo
+    </button>
+
+    <button
+      type="button"
+      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+        category === "estudio"
+          ? "bg-yellow-100 text-yellow-800"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      }`}
+      onClick={() => setCategory("estudio")}
+    >
+      📚 Estudio
+    </button>
+  </div>
+</div>
           <div>
             <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
               Fecha límite
