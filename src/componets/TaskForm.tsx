@@ -37,7 +37,7 @@ export function TaskForm({ onClose }: TaskFormProps) {
       
       // Enviar los datos a la IA
       await createTask.mutateAsync(prompt);
-      
+
       // Reset form solo si la mutación fue exitosa
       setTitle("");
       setDescription("");
