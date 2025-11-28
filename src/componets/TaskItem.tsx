@@ -190,6 +190,14 @@ const priorityColor =
       </div>
 
       {/* DESCRIPCIÓN RESUMIDA */}
+{/* DESCRIPCIÓN RESUMIDA */}
+{task.description && (
+  <p className="text-sm text-gray-700 line-clamp-3 mb-3">
+    {task.description}
+  </p>
+)}
+
+
    {/* SUBTAREAS (versión resumida en la tarjeta) */}
 {task.subtasks?.length > 0 && (
   <div className="border-t border-gray-100 pt-3">
