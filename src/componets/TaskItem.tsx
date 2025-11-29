@@ -189,12 +189,21 @@ const priorityColor =
   )}
       </div>
 
-      {/* DESCRIPCIÓN RESUMIDA */}
-{/* DESCRIPCIÓN RESUMIDA */}
+  {/* DESCRIPCIÓN RESUMIDA */}
 {task.description && (
-  <p className="text-sm text-gray-700 line-clamp-3 mb-3">
+  <p className="text-sm text-gray-700 line-clamp-3 mb-2">
     {task.description}
   </p>
+)}
+
+{/* BOTÓN "VER MÁS" */}
+{task.description && task.description.length > 120 && (
+  <button
+    className="text-sm text-indigo-600 hover:underline mb-3"
+    onClick={() => setOpenDescription(true)}
+  >
+    Ver más →
+  </button>
 )}
 
 
