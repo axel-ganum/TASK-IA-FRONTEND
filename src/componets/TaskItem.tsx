@@ -103,12 +103,12 @@ const priorityColor =
   return (
     <div
       className="
-        flex flex-col space-y-2
-        bg-white border border-gray-200
-        rounded-xl shadow-none hover:shadow-sm hover:-translate-y-[2px]
-        transition-all duration-200 ease-out
-        text-gray-800 overflow-hidden p-4 w-full max-w-sm
-      "
+    flex flex-col space-y-2
+    bg-white border border-gray-200
+    rounded-xl shadow-none hover:shadow-sm hover:-translate-y-[2px]
+    transition-all duration-200 ease-out
+    text-gray-800 overflow-hidden p-4 w-full
+      "                           
     >
       {/* ENCABEZADO */}
       <div className="flex justify-between items-start mb-3">
@@ -196,15 +196,8 @@ const priorityColor =
   </p>
 )}
 
-{/* BOTÓN "VER MÁS" */}
-{task.description && task.description.length > 120 && (
-  <button
-    className="text-sm text-indigo-600 hover:underline mb-3"
-    onClick={() => setOpenDescription(true)}
-  >
-    Ver más →
-  </button>
-)}
+
+
 
 
    {/* SUBTAREAS (versión resumida en la tarjeta) */}
@@ -235,18 +228,18 @@ const priorityColor =
           </div>
         </li>
       ))}
-
-      {/* Si hay más de 2 subtareas → mostrar botón */}
-      {task.subtasks.length > 2 && (
-        <button
-          className="text-xs text-gray-500 hover:underline mt-1"
-          onClick={() => setOpenDescription(true)}
-        >
-          Ver todas las subtareas →
-        </button>
-      )}
     </ul>
   </div>
+)}
+
+{/* BOTÓN "VER MÁS" */}
+{task.description && task.description.length > 120 && (
+  <button
+    className="text-sm text-indigo-600 hover:underline mb-3"
+    onClick={() => setOpenDescription(true)}
+  >
+    Ver más →
+  </button>
 )}
 
       {/* BOTONES DE ACCIÓN */}
@@ -334,7 +327,12 @@ const priorityColor =
 
       {/* MODAL: ANÁLISIS IA */}
       <Dialog open={openAnalysis} onOpenChange={setOpenAnalysis}>
-        <DialogContent className="w-[90vw] max-w-2xl max-h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogContent className="fixed z-[9999]
+             w-[90vw] max-w-2xl
+             max-h-[90vh]
+             flex flex-col
+             p-0
+             overflow-visible">
           <DialogHeader className="px-6 pt-6 pb-4 border-b">
             <DialogTitle className="text-xl font-semibold text-gray-900">
               Análisis de la tarea
