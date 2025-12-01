@@ -10,7 +10,7 @@ export function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className="sidebar fixed top-0 left-0 h-full z-50 bg-white shadow">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-indigo-700 flex items-center gap-2 mb-1">
             <span className="bg-indigo-100 p-2 rounded-lg">📝</span>
@@ -144,7 +144,7 @@ export function Home() {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content">
+      <div className="main-content relative z-0 ml-64">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="header bg-transparent border-0 sticky top-0 z-10 pt-6 pb-2 px-0">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
