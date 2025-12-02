@@ -1,6 +1,7 @@
 import { TaskItem } from './TaskItem';
 import { useTasks } from '../hooks/useTasks';
 import { toast } from 'react-toastify';
+import ReactMarkdown from "react-markdown";
 import { useState } from 'react';
 
 export function TaskList({ filter }: { filter: 'all' | 'today' | 'upcoming' | 'completed' | 'trabajo' | 'personal' | 'estudio' }) {
@@ -222,9 +223,11 @@ const filteredTasks = filteredBySection.filter(task => {
                       Resumen de tareas
                     </h3>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500 whitespace-pre-wrap">
-                        {summaryText || 'No se pudo generar un resumen.'}
-                      </p>
+                     <div className="prose prose-sm max-w-none text-gray-700">
+                        <ReactMarkdown>
+                          {summaryText || 'No se pudo generar un resumen.'}
+                        </ReactMarkdown>
+                     </div>
                     </div>
                   </div>
                 </div>
