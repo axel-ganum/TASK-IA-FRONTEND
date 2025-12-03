@@ -210,11 +210,15 @@ const filteredTasks = filteredBySection.filter(task => {
      {/* MODAL: RESUMEN IA */}
 <Dialog open={summaryModalOpen} onOpenChange={setSummaryModalOpen}>
   <DialogContent className="fixed z-[9999]
-       w-[90vw] max-w-2xl
-       max-h-[90vh]
-       flex flex-col
-       p-0
-       overflow-hidden">
+      w-[90vw] max-w-2xl
+      max-h-[90vh]
+      flex flex-col
+      p-0
+      overflow-hidden
+
+      sm:top-[50%] sm:left-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2
+      top-auto bottom-0 sm:bottom-auto
+      rounded-t-2xl sm:rounded-xl">
 
     <DialogHeader className="px-6 pt-6 pb-4 border-b">
       <DialogTitle className="text-xl font-semibold text-gray-900">
