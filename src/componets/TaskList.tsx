@@ -3,6 +3,10 @@ import { useTasks } from '../hooks/useTasks';
 import { toast } from 'react-toastify';
 import ReactMarkdown from "react-markdown";
 import { useState } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
+import { DialogHeader } from '../utils/dialog';
+import remarkGfm from 'remark-gfm';
+import { Button } from '../utils/button';
 
 export function TaskList({ filter }: { filter: 'all' | 'today' | 'upcoming' | 'completed' | 'trabajo' | 'personal' | 'estudio' }) {
   const { tasks, isLoading, isError, summarize } = useTasks();
@@ -202,49 +206,52 @@ const filteredTasks = filteredBySection.filter(task => {
         </div>
       )}
 
-      {/* Modal de resumen */}
-      {summaryModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onClick={() => setSummaryModalOpen(false)}></div>
+    
+     {/* MODAL: RESUMEN IA */}
+<Dialog open={summaryModalOpen} onOpenChange={setSummaryModalOpen}>
+  <DialogContent className="fixed z-[9999]
+       w-[90vw] max-w-2xl
+       max-h-[90vh]
+       flex flex-col
+       p-0
+       overflow-hidden">
 
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <DialogHeader className="px-6 pt-6 pb-4 border-b">
+      <DialogTitle className="text-xl font-semibold text-gray-900">
+        Resumen de tareas
+      </DialogTitle>
+      <DialogDescription className="text-gray-600">
+        Resumen generado por IA
+      </DialogDescription>
+    </DialogHeader>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <svg className="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                      Resumen de tareas
-                    </h3>
-                    <div className="mt-2">
-                     <div className="prose prose-sm max-w-none text-gray-700">
-                        <ReactMarkdown>
-                          {summaryText || 'No se pudo generar un resumen.'}
-                        </ReactMarkdown>
-                     </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button 
-                  type="button" 
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => setSummaryModalOpen(false)}
-                >
-                  Cerrar
-                </button>
-              </div>
-            </div>
-          </div>
+    <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+      <div className="bg-indigo-50/50 p-5 rounded-lg border border-indigo-100">
+        <h4 className="flex items-center gap-2 text-lg font-medium text-indigo-800 mb-3">
+          <span className="text-xl">📄</span> Resumen
+        </h4>
+
+        <div className="prose prose-sm max-w-none text-gray-700">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {summaryText || 'No se pudo generar un resumen.'}
+          </ReactMarkdown>
         </div>
-      )}
+      </div>
+    </div>
+
+    <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-3">
+      <Button 
+        variant="outline" 
+        onClick={() => setSummaryModalOpen(false)}
+        className="px-4"
+      >
+        Cerrar
+      </Button>
+    </div>
+
+  </DialogContent>
+</Dialog>
+
     </div>
   );
 }
