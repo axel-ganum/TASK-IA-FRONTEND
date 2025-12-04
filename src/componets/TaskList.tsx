@@ -215,7 +215,7 @@ const filteredTasks = filteredBySection.filter(task => {
       flex flex-col
       p-0
       overflow-hidden
-
+      bg-white            /* ← evita transparencia */
       sm:top-[50%] sm:left-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2
       top-auto bottom-0 sm:bottom-auto
       rounded-t-2xl sm:rounded-xl">
