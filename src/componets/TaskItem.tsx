@@ -104,15 +104,17 @@ const priorityColor =
     <div
       className="
     flex flex-col space-y-2
-    bg-white border border-gray-200
+    bg-white dark:bg-gray-900 
+    border border-gray-200 dark:border-gray-700
     rounded-xl shadow-none hover:shadow-sm hover:-translate-y-[2px]
     transition-all duration-200 ease-out
-    text-gray-800 overflow-hidden p-4 w-full
+    text-gray-800 dark:text-gray-100
+    overflow-hidden p-4 w-full
       "                           
     >
       {/* ENCABEZADO */}
       <div className="flex justify-between items-start mb-3">
-        <h3 className="font-semibold text-base text-gray-900 leading-snug line-clamp-2">
+        <h3 className="font-semibold text-base text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
           {task.completed ? "✅" : "🕓"} {task.title}
         </h3>
 
@@ -160,13 +162,13 @@ const priorityColor =
       className={`
         px-2 py-0.5 rounded-full text-xs font-medium
         ${
-          task.category === "trabajo"
-            ? "bg-indigo-100 text-indigo-800"
-            : task.category === "personal"
-            ? "bg-green-100 text-green-800"
-            : task.category === "estudio"
-            ? "bg-yellow-100 text-yellow-800"
-            : "bg-gray-100 text-gray-700"
+ task.category === "trabajo"
+          ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200"
+          : task.category === "personal"
+          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+          : task.category === "estudio"
+          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+          : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
         }
       `}
     >
@@ -178,7 +180,7 @@ const priorityColor =
 
   {/* Fecha */}
   {task.dueDate && (
-    <span className="text-xs text-gray-500">
+    <span className="text-xs text-gray-500 dark:text-gray-400">
       📅{" "}
       {new Date(task.dueDate).toLocaleDateString("es-ES", {
         day: "numeric",
@@ -191,7 +193,7 @@ const priorityColor =
 
   {/* DESCRIPCIÓN RESUMIDA */}
 {task.description && (
-  <p className="text-sm text-gray-700 line-clamp-3 mb-2">
+  <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 mb-2">
     {task.description}
   </p>
 )}
@@ -203,11 +205,14 @@ const priorityColor =
    {/* SUBTAREAS (versión resumida en la tarjeta) */}
 {task.subtasks?.length > 0 && (
   <div className="border-t border-gray-100 pt-3">
-    <ul className="space-y-1 text-sm text-gray-700">
+    <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
       {task.subtasks.slice(0, 2).map((sub) => (
         <li
           key={sub.id}
-          className="flex justify-between items-center bg-gray-50 px-2 py-1 rounded-md border"
+          className="flex justify-between items-center 
+    bg-gray-50 dark:bg-gray-800 
+    px-2 py-1 rounded-md 
+    border border-gray-200 dark:border-gray-700"
         >
           <span className="truncate">
             {sub.completed ? "✅" : "🕓"} {sub.title}
@@ -256,16 +261,16 @@ const priorityColor =
 
      {/* MODAL: DETALLE COMPLETO (descripción + subtareas) */}
 <Dialog open={openDescription} onOpenChange={setOpenDescription}>
-  <DialogContent className="fixed z-[999999] max-w-lg max-h-[80vh] overflow-y-auto bg-white rounded-xl shadow-xl mt-10">
+  <DialogContent className="fixed z-[999999] max-w-lg max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl mt-10">
     <DialogHeader>
       <DialogTitle>{task.title}</DialogTitle>
-      <DialogDescription className="text-gray-600">
+      <DialogDescription className="text-gray-600 dark:text-gray-400">
         Descripción completa y subtareas.
       </DialogDescription>
     </DialogHeader>
 
     {/* DESCRIPCIÓN */}
-    <div className="prose max-w-none text-sm mt-3">
+    <div className="prose max-w-none text-sm mt-3 dark:text-gray-300">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
         {task.description || "Sin descripción"}
       </ReactMarkdown>
@@ -279,7 +284,11 @@ const priorityColor =
         {task.subtasks?.map((sub) => (
           <li
             key={sub.id}
-            className="flex justify-between items-center bg-gray-50 p-2 rounded-lg border text-sm"
+            className="flex justify-between items-center 
+    bg-gray-50 dark:bg-gray-800 
+    p-2 rounded-lg 
+    border border-gray-200 dark:border-gray-700 
+    text-sm dark:text-gray-300"
           >
             <span>
               {sub.completed ? "✅" : "🕓"} {sub.title}
@@ -328,22 +337,23 @@ const priorityColor =
       {/* MODAL: ANÁLISIS IA */}
       <Dialog open={openAnalysis} onOpenChange={setOpenAnalysis}>
         <DialogContent className="fixed z-[9999]
-             w-[90vw] max-w-2xl
-             max-h-[90vh]
-             flex flex-col
-             p-0
-             overflow-visible">
+     w-[90vw] max-w-2xl
+     max-h-[90vh]
+     flex flex-col
+     p-0
+     overflow-visible
+     bg-white dark:bg-gray-900">
           <DialogHeader className="px-6 pt-6 pb-4 border-b">
-            <DialogTitle className="text-xl font-semibold text-gray-900">
+            <DialogTitle className="ext-xl font-semibold text-gray-900 dark:text-gray-100">
               Análisis de la tarea
             </DialogTitle>
-            <DialogDescription className="text-gray-600">
+            <DialogDescription className="text-gray-600 dark:text-gray-400">
               Análisis generado por IA para: <span className="font-medium">{task.title}</span>
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
-            <div className="bg-blue-50/50 p-5 rounded-lg border border-blue-100">
+            <div className="bg-blue-50/50 dark:bg-blue-900/30 p-5 rounded-lg border border-blue-100 dark:border-blue-800">
               <h4 className="flex items-center gap-2 text-lg font-medium text-blue-800 mb-3">
                 <span className="text-xl">🔍</span> Insights
               </h4>
@@ -354,7 +364,7 @@ const priorityColor =
               </div>
             </div>
 
-            <div className="bg-purple-50/50 p-5 rounded-lg border border-purple-100">
+            <div className="bg-purple-50/50 dark:bg-purple-900/30 p-5 rounded-lg border border-purple-100 dark:border-purple-800">
               <h4 className="flex items-center gap-2 text-lg font-medium text-purple-800 mb-3">
                 <span className="text-xl">💡</span> Sugerencias
               </h4>
@@ -366,7 +376,7 @@ const priorityColor =
             </div>
           </div>
 
-          <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-3">
+          <div className="px-6 py-4 border-t bg-gray-50 dark:bg-gray-800 flex justify-end space-x-3">
             <Button 
               variant="outline" 
               onClick={() => setOpenAnalysis(false)}

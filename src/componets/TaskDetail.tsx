@@ -17,23 +17,34 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
     return format(new Date(dateString), "d 'de' MMMM 'de' yyyy", { locale: es });
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed': return 'Completada';
-      case 'in-progress': return 'En progreso';
-      case 'blocked': return 'Bloqueada';
-      default: return 'Pendiente';
-    }
-  };
+const getStatusText = (status: string) => {
+  switch (status) {
+    case "completed":
+      return "Completada";
+    case "in-progress":
+      return "En progreso";
+    case "blocked":
+      return "Bloqueada";
+    default:
+      return "Pendiente";
+  }
+};
 
-  const getStatusClass = (status: string) => {
-    switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'in-progress': return 'bg-blue-100 text-blue-800';
-      case 'blocked': return 'bg-red-100 text-red-800';
-      default: return 'bg-yellow-100 text-yellow-800';
-    }
-  };
+const getStatusClass = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    case "in-progress":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "blocked":
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    case "completed":
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    default:
+      return "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200";
+  }
+};
+
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
@@ -45,13 +56,17 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
   };
 
   const getPriorityClass = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'urgent': return 'bg-red-100 text-red-800';
-      default: return 'bg-blue-100 text-blue-800';
-    }
+     switch (priority) {
+    case "high":
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+    case "medium":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+    case "low":
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+    default:
+      return "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200"
   };
+}
 
   const [safeDescription] = useState<string>(() => {
     if (!task.description) return '';
@@ -72,7 +87,7 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 z-[9999] overflow-y-auto"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 z-[9999] overflow-y-auto"
       onClick={handleBackdropClick}
       style={{ 
         position: 'fixed',
@@ -84,7 +99,7 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
       }}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl my-8 flex flex-col max-h-[calc(100vh-4rem)] overflow-hidden"
+        className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl shadow-2xl w-full max-w-2xl my-8 flex flex-col max-h-[calc(100vh-4rem)] overflow-hidden"
         onClick={e => e.stopPropagation()}
         style={{
           position: 'relative',
@@ -95,28 +110,47 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
         }}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex-shrink-0">
-          <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900">{task.title}</h2>
-              <div className="flex items-center gap-2 mt-1">
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getStatusClass(task.status)}`}>
-                  {getStatusText(task.status)}
-                </span>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getPriorityClass(task.priority)}`}>
-                  {getPriorityText(task.priority)}
-                </span>
-              </div>
-            </div>
-            <button 
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-500 transition-colors ml-4"
-              aria-label="Cerrar"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+  <div className="flex justify-between items-start">
+    <div>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+        {task.title}
+      </h2>
+
+      <div className="flex items-center gap-2 mt-1">
+
+        {/* Badge de Status */}
+        <span
+          className={`
+            px-2 py-0.5 text-xs font-medium rounded-full
+            ${getStatusClass(task.status)}
+          `}
+        >
+          {getStatusText(task.status)}
+        </span>
+
+        {/* Badge de Prioridad */}
+        <span
+          className={`
+            px-2 py-0.5 text-xs font-medium rounded-full
+            ${getPriorityClass(task.priority)}
+          `}
+        >
+          {getPriorityText(task.priority)}
+        </span>
+      </div>
+    </div>
+
+    <button
+      onClick={onClose}
+      className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors ml-4"
+      aria-label="Cerrar"
+    >
+      <X className="h-5 w-5" />
+    </button>
+  </div>
+</div>
+
 
         {/* Content */}
         <div className="p-6 overflow-y-auto flex-1" style={{ 
@@ -141,7 +175,7 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
                   {task.tags.map(tag => (
                     <span 
                       key={tag} 
-                      className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full"
+                      className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full  dark:bg-gray-700 dark:text-gray-300"
                     >
                       {tag}
                     </span>
@@ -155,7 +189,7 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
           {task.description && (
             <div>
               <h3 className="text-sm font-medium text-gray-700 mb-2">Descripción</h3>
-              <div className="prose prose-sm max-w-none bg-gray-50 p-4 rounded-lg text-gray-700 whitespace-pre-line" 
+              <div className="prose prose-sm max-w-none bg-gray-50 dark:bg-gray-800  p-4 rounded-lg text-gray-700 dark:text-gray-300whitespace-pre-line" 
                    dangerouslySetInnerHTML={{ __html: safeDescription }} 
               />
             </div>
@@ -176,7 +210,7 @@ export function TaskDetail({ task, onClose, onToggleSubtask, onDeleteSubtask }: 
                 task.subtasks.map((subtask: Subtask) => (
                   <li 
                     key={subtask.id}
-                    className="flex justify-between items-center p-2 bg-white rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex justify-between items-center p-2 bg-white dark:bg-gray-800  rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700  transition-colors"
                   >
                     <div className="flex items-center flex-1 min-w-0">
                       <span className={`mr-2 ${subtask.completed ? 'text-green-500' : 'text-gray-400'}`}>

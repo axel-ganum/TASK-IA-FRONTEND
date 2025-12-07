@@ -124,26 +124,41 @@ const filteredTasks = filteredBySection.filter(task => {
       {/* Filtros y búsqueda */}
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         {/* Pestañas */}
-        <div className="flex rounded-lg bg-gray-100 p-1">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'all' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-          >
-            Todas
-          </button>
-          <button
-            onClick={() => setActiveTab('pending')}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'pending' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-          >
-            Pendientes
-          </button>
-          <button
-            onClick={() => setActiveTab('completed')}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'completed' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-          >
-            Completadas
-          </button>
-        </div>
+       <div className="flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+  <button
+    onClick={() => setActiveTab('all')}
+    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+      activeTab === 'all'
+        ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-900 dark:text-gray-100'
+        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+    }`}
+  >
+    Todas
+  </button>
+
+  <button
+    onClick={() => setActiveTab('pending')}
+    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+      activeTab === 'pending'
+        ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-900 dark:text-gray-100'
+        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+    }`}
+  >
+    Pendientes
+  </button>
+
+  <button
+    onClick={() => setActiveTab('completed')}
+    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+      activeTab === 'completed'
+        ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-900 dark:text-gray-100'
+        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+    }`}
+  >
+    Completadas
+  </button>
+</div>
+
 
         {/* Búsqueda */}
         <div className="relative">
@@ -152,19 +167,27 @@ const filteredTasks = filteredBySection.filter(task => {
               <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
             </svg>
           </div>
-          <input
-            type="text"
-            placeholder="Buscar tareas..."
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+         <input
+  type="text"
+  placeholder="Buscar tareas..."
+  className="block w-full pl-10 pr-3 py-2 border 
+    border-gray-300 dark:border-gray-700 
+    rounded-md leading-5 
+    bg-white dark:bg-gray-900
+    placeholder-gray-500 dark:placeholder-gray-400
+    text-gray-900 dark:text-gray-100
+    focus:outline-none focus:ring-2 focus:ring-indigo-500 
+    focus:border-indigo-500 sm:text-sm"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+/>
+
         </div>
       </div>
 
       {/* Contador de tareas */}
       <div className="flex justify-between items-center">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {filteredTasks.length} {filteredTasks.length === 1 ? 'tarea' : 'tareas'} {activeTab !== 'all' ? activeTab === 'completed' ? 'completadas' : 'pendientes' : ''}
         </p>
         
@@ -195,66 +218,66 @@ const filteredTasks = filteredBySection.filter(task => {
   ))}
 </div>
       ) : (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No se encontraron tareas</h3>
-          <p className="mt-1 text-sm text-gray-500">
-            Intenta con otros términos de búsqueda o crea una nueva tarea.
-          </p>
-        </div>
+        <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-lg shadow">
+  <svg className="mx-auto h-12 w-12 text-gray-500 dark:text-gray-400" />
+  
+  <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+    No se encontraron tareas
+  </h3>
+
+  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+    Intenta con otros términos de búsqueda o crea una nueva tarea.
+  </p>
+</div>
+
       )}
 
     
      {/* MODAL: RESUMEN IA */}
 <Dialog open={summaryModalOpen} onOpenChange={setSummaryModalOpen}>
-  <DialogContent className="fixed z-[9999]
-    w-[90vw] max-w-2xl
-    max-h-[90vh]
-    flex flex-col
-    p-0
-    overflow-hidden
-    bg-white
-    sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2
-    bottom-0 sm:bottom-auto
-    rounded-t-2xl sm:rounded-xl
-    shadow-xl">
+  <DialogContent className="
+  fixed z-[9999]
+  w-[90vw] max-w-2xl max-h-[90vh]
+  flex flex-col p-0 overflow-hidden
+  bg-white dark:bg-gray-900
+  border dark:border-gray-700
+  sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2
+  bottom-0 sm:bottom-auto
+  rounded-t-2xl sm:rounded-xl
+  shadow-xl
+">
 
-    <DialogHeader className="px-6 pt-6 pb-4 border-b">
-      <DialogTitle className="text-xl font-semibold text-gray-900">
-        Resumen de tareas
-      </DialogTitle>
-      <DialogDescription className="text-gray-600">
-        Resumen generado por IA
-      </DialogDescription>
-    </DialogHeader>
+  <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+    <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+      Resumen de tareas
+    </DialogTitle>
+    <DialogDescription className="text-gray-600 dark:text-gray-400">
+      Resumen generado por IA
+    </DialogDescription>
+  </DialogHeader>
 
-    <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
-      <div className="bg-indigo-50/50 p-5 rounded-lg border border-indigo-100">
-        <h4 className="flex items-center gap-2 text-lg font-medium text-indigo-800 mb-3">
-          <span className="text-xl">📄</span> Resumen
-        </h4>
+  <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+    <div className="bg-indigo-50/50 dark:bg-indigo-900/20 p-5 rounded-lg border border-indigo-100 dark:border-indigo-800">
+      <h4 className="flex items-center gap-2 text-lg font-medium text-indigo-800 dark:text-indigo-300 mb-3">
+        <span className="text-xl">📄</span> Resumen
+      </h4>
 
-        <div className="prose prose-sm max-w-none text-gray-700">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {summaryText || 'No se pudo generar un resumen.'}
-          </ReactMarkdown>
-        </div>
+      <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {summaryText || 'No se pudo generar un resumen.'}
+        </ReactMarkdown>
       </div>
     </div>
+  </div>
 
-    <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-3">
-      <Button 
-        variant="outline" 
-        onClick={() => setSummaryModalOpen(false)}
-        className="px-4"
-      >
-        Cerrar
-      </Button>
-    </div>
+  <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex justify-end space-x-3">
+    <Button variant="outline" className="px-4" onClick={() => setSummaryModalOpen(false)}>
+      Cerrar
+    </Button>
+  </div>
 
-  </DialogContent>
+</DialogContent>
+
 </Dialog>
 
     </div>
