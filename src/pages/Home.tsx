@@ -8,22 +8,24 @@ export function Home() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
-      <aside className="sidebar fixed top-0 left-0 h-full z-50 bg-white shadow">
+      <aside className="sidebar fixed top-0 left-0 h-full z-50 bg-white dark:bg-gray-800 shadow">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-indigo-700 flex items-center gap-2 mb-1">
+          <h1 className="text-2xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2 mb-1">
             <span className="bg-indigo-100 p-2 rounded-lg">📝</span>
             Task IA
           </h1>
-          <p className="text-sm text-gray-500">Organiza tus tareas con IA</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Organiza tus tareas con IA</p>
         </div>
 
         <nav className="space-y-1">
         <button
   onClick={() => setSection('all')}
   className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3
-    ${section === 'all' ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}
+    ${section === 'all' 
+      ? 'bg-indigo-50 text-indigo-700 font-medium dark:bg-indigo-700 dark:text-indigo-100' 
+      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'}
   `}
 >
   <svg
@@ -47,7 +49,9 @@ export function Home() {
 <button
   onClick={() => setSection('today')}
   className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3
-    ${section === 'today' ? 'bg-red-50 text-red-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}
+    ${section === 'today' 
+      ? 'bg-red-50 text-red-700 font-medium dark:bg-red-700 dark:text-red-100' 
+      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'}
   `}
 >
   <svg
@@ -71,7 +75,9 @@ export function Home() {
 <button
   onClick={() => setSection('completed')}
   className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3
-    ${section === 'completed' ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}
+    ${section === 'completed' 
+      ? 'bg-green-50 text-green-700 font-medium dark:bg-green-700 dark:text-green-100' 
+      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'}
   `}
 >
   <svg
@@ -104,12 +110,12 @@ export function Home() {
     <button
       onClick={() => setSection('trabajo')}
       className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2
-        ${section === 'trabajo' 
-          ? 'bg-indigo-50 text-indigo-700 font-medium' 
-          : 'text-gray-600 hover:bg-gray-100'}
+    ${section === 'trabajo' 
+      ? 'bg-indigo-50 text-indigo-700 font-medium dark:bg-indigo-700 dark:text-indigo-100' 
+      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'}
       `}
     >
-      <span className="w-3 h-3 rounded-full bg-indigo-500"></span>
+      <span className="w-3 h-3 rounded-full bg-indigo-500 dark:bg-indigo-300"></span>
       Trabajo
     </button>
 
@@ -117,12 +123,12 @@ export function Home() {
     <button
       onClick={() => setSection('personal')}
       className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2
-        ${section === 'personal' 
-          ? 'bg-green-50 text-green-700 font-medium' 
-          : 'text-gray-600 hover:bg-gray-100'}
+    ${section === 'personal' 
+      ? 'bg-green-50 text-green-700 font-medium dark:bg-green-700 dark:text-green-100' 
+      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'}
       `}
     >
-      <span className="w-3 h-3 rounded-full bg-green-500"></span>
+      <span className="w-3 h-3 rounded-full bg-green-500 dark:bg-green-300"></span>
       Personal
     </button>
 
@@ -130,12 +136,12 @@ export function Home() {
     <button
       onClick={() => setSection('estudio')}
       className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2
-        ${section === 'estudio' 
-          ? 'bg-yellow-50 text-yellow-700 font-medium' 
-          : 'text-gray-600 hover:bg-gray-100'}
+    ${section === 'estudio' 
+      ? 'bg-yellow-50 text-yellow-700 font-medium dark:bg-yellow-700 dark:text-yellow-100' 
+      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'}
       `}
     >
-      <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+      <span className="w-3 h-3 rounded-full bg-yellow-500 dark:bg-yellow-30"></span>
       Estudio
     </button>
 
@@ -144,13 +150,13 @@ export function Home() {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content relative z-0 ml-64">
+      <div className="main-content relative z-0 ml-64 bg-gray-50 dark:bg-gray-900">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="header bg-transparent border-0 sticky top-0 z-10 pt-6 pb-2 px-0">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Mis Tareas</h2>
-                <p className="text-sm text-gray-500">Gestiona y organiza tus tareas diarias</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mis Tareas</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Gestiona y organiza tus tareas diarias</p>
               </div>
               <button 
                 onClick={() => setShowTaskForm(!showTaskForm)}

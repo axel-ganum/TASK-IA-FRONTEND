@@ -53,15 +53,15 @@ export function TaskForm({ onClose }: TaskFormProps) {
   };
 
   return (
-    <div className="card bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="p-5 border-b border-gray-100 bg-gray-50">
+    <div className="card bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
+      <div className="p-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-semibold text-gray-900">Nueva Tarea con IA</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Nueva Tarea con IA</h3>
           {onClose && (
             <button 
               type="button" 
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-500"
+              className="text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-100"
             >
               <span className="sr-only">Cerrar</span>
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,14 +70,14 @@ export function TaskForm({ onClose }: TaskFormProps) {
             </button>
           )}
         </div>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Describe la tarea y la IA te ayudará a crearla con el formato adecuado.
         </p>
       </div>
       
-      <form onSubmit={handleSubmit} className="p-5 space-y-4">
+      <form onSubmit={handleSubmit} className="p-5 space-y-4 bg-white dark:bg-gray-900">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Título <span className="text-red-500">*</span>
           </label>
           <input
@@ -86,7 +86,7 @@ export function TaskForm({ onClose }: TaskFormProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Título de la tarea"
-            className="input"
+            className="input dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
             required
           />
         </div>
@@ -100,7 +100,7 @@ export function TaskForm({ onClose }: TaskFormProps) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Añade detalles sobre la tarea..."
-            className="input min-h-[100px]"
+            className="input min-h-[100px] dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
             rows={3}
           />
         </div>
@@ -114,9 +114,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
               <button
                 type="button"
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  priority === 'high' 
-                    ? 'bg-red-100 text-red-800' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+  priority === 'high' 
+    ? 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100' 
+    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => setPriority('high')}
               >
@@ -125,9 +125,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
               <button
                 type="button"
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  priority === 'medium' 
-                    ? 'bg-yellow-100 text-yellow-800' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+  priority === 'medium' 
+    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100' 
+    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => setPriority('medium')}
               >
@@ -136,9 +136,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
               <button
                 type="button"
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  priority === 'low' 
-                    ? 'bg-blue-100 text-blue-800' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+  priority === 'low' 
+    ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100' 
+    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => setPriority('low')}
               >
@@ -156,9 +156,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
     <button
       type="button"
       className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-        category === "personal"
-          ? "bg-green-100 text-green-800"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+  category === "personal"
+    ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
       }`}
       onClick={() => setCategory("personal")}
     >
@@ -168,9 +168,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
     <button
       type="button"
       className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-        category === "trabajo"
-          ? "bg-indigo-100 text-indigo-800"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+  category === "trabajo"
+    ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-800 dark:text-indigo-100"
+    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
       }`}
       onClick={() => setCategory("trabajo")}
     >
@@ -180,9 +180,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
     <button
       type="button"
       className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-        category === "estudio"
-          ? "bg-yellow-100 text-yellow-800"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+  category === "estudio"
+    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
+    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
       }`}
       onClick={() => setCategory("estudio")}
     >
@@ -199,7 +199,7 @@ export function TaskForm({ onClose }: TaskFormProps) {
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="input"
+              className="input dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
@@ -210,7 +210,7 @@ export function TaskForm({ onClose }: TaskFormProps) {
             <button
               type="button"
               onClick={onClose}
-              className="btn btn-ghost order-2 sm:order-1 w-full sm:w-auto"
+              className="btn btn-ghost dark:text-gray-300 dark:hover:bg-gray-800 order-2 sm:order-1 w-full sm:w-auto"
             >
               Cancelar
             </button>
