@@ -87,7 +87,7 @@ const getStatusClass = (status: string) => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 z-[9999] overflow-y-auto"
+      className="fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-sm flex items-start justify-center p-4 z-[9999] overflow-y-auto"
       onClick={handleBackdropClick}
       style={{ 
         position: 'fixed',
@@ -99,21 +99,20 @@ const getStatusClass = (status: string) => {
       }}
     >
       <div 
-        className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl shadow-2xl w-full max-w-2xl my-8 flex flex-col max-h-[calc(100vh-4rem)] overflow-hidden"
-        onClick={e => e.stopPropagation()}
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border border-gray-200 dark:border-gray-700"
         style={{
-          position: 'relative',
-          zIndex: 10000,
           maxHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column'
+          margin: 'auto',
+          position: 'relative',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#c7d2fe #f1f1f1',
         }}
       >
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
   <div className="flex justify-between items-start">
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
         {task.title}
       </h2>
 
@@ -141,36 +140,31 @@ const getStatusClass = (status: string) => {
       </div>
     </div>
 
-    <button
+    <Button 
+      variant="ghost"
       onClick={onClose}
-      className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors ml-4"
+      className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 p-2"
       aria-label="Cerrar"
     >
       <X className="h-5 w-5" />
-    </button>
+    </Button>
   </div>
 </div>
 
-
         {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1" style={{ 
-          scrollbarWidth: 'thin',
-          WebkitOverflowScrolling: 'touch',
-          overflowY: 'auto',
-          maxHeight: 'calc(90vh - 150px)' // Ajusta según el tamaño del header y footer
-        }}>
+        <div className="p-6 space-y-6">
           {/* Meta Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <div className="font-medium text-gray-700 mb-1">Fecha de vencimiento</div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">Fecha de vencimiento</h4>
+              <p className="mt-1 text-sm text-gray-900 dark:text-gray-100 flex items-center gap-2">
                 <span>📅</span>
-                <span>{formatDate(task.dueDate)}</span>
-              </div>
+                <span>{task.dueDate ? formatDate(task.dueDate) : 'Sin fecha'}</span>
+              </p>
             </div>
             {task.tags?.length > 0 && (
               <div>
-                <div className="font-medium text-gray-700 mb-1">Etiquetas</div>
+                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">Etiquetas</h4>
                 <div className="flex flex-wrap gap-1">
                   {task.tags.map(tag => (
                     <span 
@@ -187,19 +181,14 @@ const getStatusClass = (status: string) => {
 
           {/* Description */}
           {task.description && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Descripción</h3>
-              <div className="prose prose-sm max-w-none bg-gray-50 dark:bg-gray-800  p-4 rounded-lg text-gray-700 dark:text-gray-300whitespace-pre-line" 
-                   dangerouslySetInnerHTML={{ __html: safeDescription }} 
-              />
-            </div>
+            <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: safeDescription }} />
           )}
           {/* Subtareas */}
           <div className="border-t border-gray-100 pt-4 mt-2">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-sm font-medium text-gray-700">Subtareas</h3>
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">Subtareas</h3>
               {task.subtasks?.length > 0 && (
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   {task.subtasks.filter(st => st.completed).length} de {task.subtasks.length} completadas
                 </span>
               )}
@@ -210,15 +199,22 @@ const getStatusClass = (status: string) => {
                 task.subtasks.map((subtask: Subtask) => (
                   <li 
                     key={subtask.id}
-                    className="flex justify-between items-center p-2 bg-white dark:bg-gray-800  rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700  transition-colors"
+                    className="flex justify-between items-center p-3 
+                      bg-white dark:bg-gray-800/50 
+                      border border-gray-100 dark:border-gray-700
+                      rounded-lg 
+                      hover:bg-gray-50 dark:hover:bg-gray-700/50 
+                      transition-colors"
                   >
                     <div className="flex items-center flex-1 min-w-0">
-                      <span className={`mr-2 ${subtask.completed ? 'text-green-500' : 'text-gray-400'}`}>
-                        {subtask.completed ? '✅' : '🕓'}
+                      <span className={`mr-3 ${subtask.completed ? 'text-green-500 dark:text-green-400' : 'text-gray-400 dark:text-gray-500'}`}>
+                        {subtask.completed ? '✓' : '○'}
                       </span>
                       <span 
                         className={`text-sm truncate ${
-                          subtask.completed ? 'line-through text-gray-400' : 'text-gray-700'
+                          subtask.completed 
+                            ? 'line-through text-gray-400 dark:text-gray-400' 
+                            : 'text-gray-700 dark:text-gray-100'
                         }`}
                         title={subtask.title}
                       >
@@ -232,7 +228,7 @@ const getStatusClass = (status: string) => {
                             e.stopPropagation();
                             onToggleSubtask(subtask.id, !subtask.completed);
                           }}
-                          className="text-xs text-blue-600 hover:underline"
+                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
                           aria-label={subtask.completed ? 'Marcar como pendiente' : 'Marcar como hecha'}
                         >
                           {subtask.completed ? 'Pendiente' : 'Hecho'}
@@ -246,7 +242,7 @@ const getStatusClass = (status: string) => {
                               onDeleteSubtask(subtask.id);
                             }
                           }}
-                          className="text-xs text-red-600 hover:underline"
+                          className="text-xs text-red-600 dark:text-red-400 hover:underline"
                           aria-label="Eliminar subtarea"
                         >
                           Eliminar
@@ -265,14 +261,15 @@ const getStatusClass = (status: string) => {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-100 flex justify-between items-center text-sm text-gray-500 flex-shrink-0">
-          <span className="text-xs text-gray-400">ID: {task.id}</span>
+        <div className="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center z-10">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{task.title}</h2>
           <Button 
-            variant="ghost" 
+            variant="ghost"
             onClick={onClose}
-            className="text-sm"
+            className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 p-2"
+            aria-label="Cerrar"
           >
-            Cerrar
+            <X className="h-5 w-5" />
           </Button>
         </div>
       </div>

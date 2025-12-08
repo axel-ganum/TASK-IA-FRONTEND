@@ -75,48 +75,48 @@ export function TaskForm({ onClose }: TaskFormProps) {
         </p>
       </div>
       
-      <form onSubmit={handleSubmit} className="p-5 space-y-4 bg-white dark:bg-gray-900">
+      <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Título <span className="text-red-500">*</span>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Título
           </label>
           <input
             id="title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Título de la tarea"
-            className="input dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+            className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            placeholder="¿Qué necesitas hacer?"
             required
           />
         </div>
         
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Descripción
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Descripción (opcional)
           </label>
           <textarea
             id="description"
+            rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Añade detalles sobre la tarea..."
-            className="input min-h-[100px] dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
-            rows={3}
+            className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            placeholder="Detalles de la tarea..."
           />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Prioridad
             </label>
-            <div className="flex space-x-2">
+            <div className="flex gap-2">
               <button
                 type="button"
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-  priority === 'high' 
-    ? 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100' 
-    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  priority === 'high' 
+                    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                 }`}
                 onClick={() => setPriority('high')}
               >
@@ -125,9 +125,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
               <button
                 type="button"
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-  priority === 'medium' 
-    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100' 
-    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  priority === 'medium' 
+                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                 }`}
                 onClick={() => setPriority('medium')}
               >
@@ -136,9 +136,9 @@ export function TaskForm({ onClose }: TaskFormProps) {
               <button
                 type="button"
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-  priority === 'low' 
-    ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100' 
-    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  priority === 'low' 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                 }`}
                 onClick={() => setPriority('low')}
               >
@@ -147,95 +147,84 @@ export function TaskForm({ onClose }: TaskFormProps) {
             </div>
           </div>
           
-        <div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    Categoría
-  </label>
-
-  <div className="flex space-x-2">
-    <button
-      type="button"
-      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-  category === "personal"
-    ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
-    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-      }`}
-      onClick={() => setCategory("personal")}
-    >
-      🏠 Personal
-    </button>
-
-    <button
-      type="button"
-      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-  category === "trabajo"
-    ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-800 dark:text-indigo-100"
-    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-      }`}
-      onClick={() => setCategory("trabajo")}
-    >
-      💼 Trabajo
-    </button>
-
-    <button
-      type="button"
-      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-  category === "estudio"
-    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
-    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-      }`}
-      onClick={() => setCategory("estudio")}
-    >
-      📚 Estudio
-    </button>
-  </div>
-</div>
           <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
-              Fecha límite
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Categoría
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              <button
+                type="button"
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  category === 'personal' 
+                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                }`}
+                onClick={() => setCategory('personal')}
+              >
+                Personal
+              </button>
+              <button
+                type="button"
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  category === 'trabajo' 
+                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                }`}
+                onClick={() => setCategory('trabajo')}
+              >
+                Trabajo
+              </button>
+              <button
+                type="button"
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  category === 'estudio' 
+                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                }`}
+                onClick={() => setCategory('estudio')}
+              >
+                Estudio
+              </button>
+            </div>
+          </div>
+          <div>
+            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Fecha límite (opcional)
             </label>
             <input
-              id="dueDate"
               type="date"
+              id="dueDate"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="input dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+              className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4">
+        <div className="flex justify-end gap-3 pt-2">
           {onClose && (
             <button
               type="button"
               onClick={onClose}
-              className="btn btn-ghost dark:text-gray-300 dark:hover:bg-gray-800 order-2 sm:order-1 w-full sm:w-auto"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Cancelar
             </button>
           )}
           <button
             type="submit"
-            className="btn btn-primary order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2"
             disabled={!title.trim() || createTask.isPending}
+            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {createTask.isPending ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Generando...
-              </>
+              <span>Creando...</span>
             ) : (
-              <>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Generar con IA
-              </>
+              <span>Crear tarea</span>
             )}
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
           </button>
         </div>
       </form>

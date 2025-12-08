@@ -94,60 +94,59 @@ const priorityLabel =
 
 const priorityColor =
   priority === "high" || priority === "urgent" || priority === "alta"
-    ? "bg-red-100 text-red-800"
+    ? "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200"
     : priority === "medium" || priority === "media"
-    ? "bg-yellow-100 text-yellow-800"
-    : "bg-green-100 text-green-800";
+    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200"
+    : "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200";
 
 
   return (
     <div
       className="
-    flex flex-col space-y-2
-    bg-white dark:bg-gray-900 
-    border border-gray-200 dark:border-gray-700
-    rounded-xl shadow-none hover:shadow-sm hover:-translate-y-[2px]
-    transition-all duration-200 ease-out
-    text-gray-800 dark:text-gray-100
-    overflow-hidden p-4 w-full
+        flex flex-col space-y-2
+        bg-white dark:bg-gray-800 
+        border border-gray-200 dark:border-gray-700
+        rounded-xl shadow-sm hover:shadow-md hover:-translate-y-[1px]
+        transition-all duration-200 ease-out
+        text-gray-800 dark:text-gray-100
+        overflow-hidden p-4 w-full
+        hover:ring-1 hover:ring-indigo-100 dark:hover:ring-indigo-900/50
       "                           
     >
       {/* ENCABEZADO */}
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="font-semibold text-base text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
+      <div className="flex justify-between items-start gap-2 mb-3">
+        <h3 className="font-medium text-base text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
           {task.completed ? "✅" : "🕓"} {task.title}
         </h3>
 
-        <div className="flex flex-wrap gap-1 text-xs font-medium">
-          <Button
-            variant="link"
+        <div className="flex flex-wrap gap-2 text-sm font-medium">
+          <button
             onClick={() => update.mutate({ id: task.id, updates: { completed: !task.completed } })}
-            className="text-indigo-600 hover:underline"
+            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline transition-colors"
           >
-            {task.completed ? "Pendiente" : "Completada"}
-          </Button>
+            {task.completed ? "Marcar pendiente" : "Completar"}
+          </button>
 
-          <Button
-            variant="link"
+          <button
             onClick={() => removeTask.mutate(task.id)}
-            className="text-red-600 hover:underline"
+            className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:underline transition-colors"
           >
             Eliminar
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* ESTADO Y PRIORIDAD */}
-      <div className="flex items-center gap-2 mb-2 text-sm">
-      <span
-    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-      task.completed
-        ? "bg-green-100 text-green-800"
-        : "bg-gray-100 text-gray-800"
-    }`}
-  >
-    {task.completed ? "✓ Completada" : "📝 Pendiente"}
-  </span>
+      <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
+        <span
+          className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            task.completed
+              ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200"
+              : "bg-gray-100 text-gray-800 dark:bg-gray-700/50 dark:text-gray-300"
+          }`}
+        >
+          {task.completed ? "✓ Completada" : "📝 Pendiente"}
+        </span>
 
   {/* Prioridad */}
   <span

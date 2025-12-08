@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { TaskForm } from '../componets/TaskForm';
 import { TaskList } from '../componets/TaskList';
+import { Moon, Sun } from 'lucide-react';
 
-export function Home() {
+interface HomeProps {
+  darkMode: boolean;
+  onToggleDarkMode: () => void;
+}
+
+export function Home({ darkMode, onToggleDarkMode }: HomeProps) {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [section, setSection] = useState<'all' | 'today' | 'upcoming' | 'completed'| 'trabajo' | 'personal' | 'estudio'>('all');
 
@@ -12,11 +18,26 @@ export function Home() {
       {/* Sidebar */}
       <aside className="sidebar fixed top-0 left-0 h-full z-50 bg-white dark:bg-gray-800 shadow">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2 mb-1">
-            <span className="bg-indigo-100 p-2 rounded-lg">📝</span>
-            Task IA
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Organiza tus tareas con IA</p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2 mb-1">
+                <span className="bg-indigo-100 dark:bg-indigo-900 p-2 rounded-lg">📝</span>
+                Task IA
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Organiza tus tareas con IA</p>
+            </div>
+            <button
+              onClick={onToggleDarkMode}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label={darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5 text-yellow-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-gray-600" />
+              )}
+            </button>
+          </div>
         </div>
 
         <nav className="space-y-1">
