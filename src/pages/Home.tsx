@@ -171,13 +171,13 @@ export function Home({ darkMode, onToggleDarkMode }: HomeProps) {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content relative z-0 ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="main-content relative z-0 ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <header className="header bg-transparent border-0 sticky top-0 z-10 pt-6 pb-2 px-0">
+          <header className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6 border border-gray-100 dark:border-gray-700 transition-colors duration-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mis Tareas</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-300">Gestiona y organiza tus tareas diarias</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mis Tareas</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Gestiona y organiza tus tareas diarias</p>
               </div>
               <button 
                 onClick={() => setShowTaskForm(!showTaskForm)}

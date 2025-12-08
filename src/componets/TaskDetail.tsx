@@ -184,74 +184,97 @@ const getStatusClass = (status: string) => {
             <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: safeDescription }} />
           )}
           {/* Subtareas */}
-          <div className="border-t border-gray-100 pt-4 mt-2">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">Subtareas</h3>
+          <div className="mt-8">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-semibold text-gray-700 dark:text-gray-200">Subtareas</h3>
+                {task.subtasks?.length > 0 && (
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-200">
+                    {task.subtasks.filter(st => st.completed).length} de {task.subtasks.length}
+                  </span>
+                )}
+              </div>
+              
               {task.subtasks?.length > 0 && (
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {task.subtasks.filter(st => st.completed).length} de {task.subtasks.length} completadas
-                </span>
+                <div className="flex items-center">
+                  <div className={`h-2 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden`}>
+                    <div 
+                      className="h-full bg-indigo-500 transition-all duration-300"
+                      style={{
+                        width: task.subtasks.length > 0 
+                          ? `${(task.subtasks.filter(st => st.completed).length / task.subtasks.length) * 100}%`
+                          : '0%'
+                      }}
+                    />
+                  </div>
+                </div>
               )}
             </div>
             
-            <ul className="space-y-3">
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
               {task.subtasks && task.subtasks.length > 0 ? (
-                task.subtasks.map((subtask: Subtask) => (
-                  <li key={subtask.id} className="flex items-start gap-3 group">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onToggleSubtask?.(subtask.id, !subtask.completed);
-                      }}
-                      className="flex-shrink-0 mt-0.5"
-                      aria-label={subtask.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
-                    >
-                      <span className={`inline-flex items-center justify-center w-5 h-5 rounded border ${
-                        subtask.completed 
-                          ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-800 dark:text-green-400'
-                          : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 group-hover:border-indigo-300 dark:group-hover:border-indigo-500'
-                      }`}>
-                        {subtask.completed && '✓'}
-                      </span>
-                    </button>
-                    
-                    <div className="flex-1 min-w-0">
-                      <span 
-                        className={`text-sm ${
-                          subtask.completed 
-                            ? 'line-through text-gray-400 dark:text-gray-500' 
-                            : 'text-gray-700 dark:text-gray-200'
-                        }`}
-                        title={subtask.title}
-                      >
-                        {subtask.title}
-                      </span>
-                    </div>
-                    
-                    {onDeleteSubtask && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (window.confirm('¿Estás seguro de eliminar esta subtarea?')) {
-                            onDeleteSubtask(subtask.id);
-                          }
-                        }}
-                        className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors"
-                        aria-label="Eliminar subtarea"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    )}
-                  </li>
-                ))
+                <ul className="divide-y divide-gray-100 dark:divide-gray-700">
+                  {task.subtasks.map((subtask: Subtask) => (
+                    <li key={subtask.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                      <div className="flex items-start gap-3 group">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleSubtask?.(subtask.id, !subtask.completed);
+                          }}
+                          className="flex-shrink-0 mt-0.5"
+                          aria-label={subtask.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
+                        >
+                          <span className={`inline-flex items-center justify-center w-5 h-5 rounded border ${
+                            subtask.completed 
+                              ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-700 dark:text-green-400'
+                              : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 group-hover:border-indigo-400 dark:group-hover:border-indigo-400 transition-colors'
+                          }`}>
+                            {subtask.completed && '✓'}
+                          </span>
+                        </button>
+                        
+                        <div className="flex-1 min-w-0">
+                          <span 
+                            className={`text-sm ${
+                              subtask.completed 
+                                ? 'line-through text-gray-400 dark:text-gray-500' 
+                                : 'text-gray-700 dark:text-gray-200 font-medium'
+                            }`}
+                            title={subtask.title}
+                          >
+                            {subtask.title}
+                          </span>
+                        </div>
+                        
+                        {onDeleteSubtask && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (window.confirm('¿Estás seguro de eliminar esta subtarea?')) {
+                                onDeleteSubtask(subtask.id);
+                              }
+                            }}
+                            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-all"
+                            aria-label="Eliminar subtarea"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               ) : (
-                <li className="text-sm text-gray-400 text-center py-2">
-                  No hay subtareas. Usa el botón "Generar subtareas" para crearlas automáticamente.
-                </li>
+                <div className="p-4 text-center">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    No hay subtareas. Usa el botón "Generar subtareas" para crearlas automáticamente.
+                  </p>
+                </div>
               )}
-            </ul>
+            </div>
           </div>
         </div>
 
