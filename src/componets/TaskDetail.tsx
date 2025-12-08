@@ -194,61 +194,56 @@ const getStatusClass = (status: string) => {
               )}
             </div>
             
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {task.subtasks && task.subtasks.length > 0 ? (
                 task.subtasks.map((subtask: Subtask) => (
-                  <li 
-                    key={subtask.id}
-                    className="flex justify-between items-center p-3 
-                      bg-white dark:bg-gray-800/50 
-                      border border-gray-100 dark:border-gray-700
-                      rounded-lg 
-                      hover:bg-gray-50 dark:hover:bg-gray-700/50 
-                      transition-colors"
-                  >
-                    <div className="flex items-center flex-1 min-w-0">
-                      <span className={`mr-3 ${subtask.completed ? 'text-green-500 dark:text-green-400' : 'text-gray-400 dark:text-gray-500'}`}>
-                        {subtask.completed ? '✓' : '○'}
+                  <li key={subtask.id} className="flex items-start gap-3 group">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleSubtask?.(subtask.id, !subtask.completed);
+                      }}
+                      className="flex-shrink-0 mt-0.5"
+                      aria-label={subtask.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
+                    >
+                      <span className={`inline-flex items-center justify-center w-5 h-5 rounded border ${
+                        subtask.completed 
+                          ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-800 dark:text-green-400'
+                          : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 group-hover:border-indigo-300 dark:group-hover:border-indigo-500'
+                      }`}>
+                        {subtask.completed && '✓'}
                       </span>
+                    </button>
+                    
+                    <div className="flex-1 min-w-0">
                       <span 
-                        className={`text-sm truncate ${
+                        className={`text-sm ${
                           subtask.completed 
-                            ? 'line-through text-gray-400 dark:text-gray-400' 
-                            : 'text-gray-700 dark:text-gray-100'
+                            ? 'line-through text-gray-400 dark:text-gray-500' 
+                            : 'text-gray-700 dark:text-gray-200'
                         }`}
                         title={subtask.title}
                       >
                         {subtask.title}
                       </span>
                     </div>
-                    <div className="flex gap-2 ml-2">
-                      {onToggleSubtask && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onToggleSubtask(subtask.id, !subtask.completed);
-                          }}
-                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                          aria-label={subtask.completed ? 'Marcar como pendiente' : 'Marcar como hecha'}
-                        >
-                          {subtask.completed ? 'Pendiente' : 'Hecho'}
-                        </button>
-                      )}
-                      {onDeleteSubtask && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (window.confirm('¿Estás seguro de eliminar esta subtarea?')) {
-                              onDeleteSubtask(subtask.id);
-                            }
-                          }}
-                          className="text-xs text-red-600 dark:text-red-400 hover:underline"
-                          aria-label="Eliminar subtarea"
-                        >
-                          Eliminar
-                        </button>
-                      )}
-                    </div>
+                    
+                    {onDeleteSubtask && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (window.confirm('¿Estás seguro de eliminar esta subtarea?')) {
+                            onDeleteSubtask(subtask.id);
+                          }
+                        }}
+                        className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors"
+                        aria-label="Eliminar subtarea"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    )}
                   </li>
                 ))
               ) : (

@@ -171,19 +171,21 @@ export function Home({ darkMode, onToggleDarkMode }: HomeProps) {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content relative z-0 ml-64 bg-gray-50 dark:bg-gray-900">
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="main-content relative z-0 ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <header className="header bg-transparent border-0 sticky top-0 z-10 pt-6 pb-2 px-0">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mis Tareas</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Gestiona y organiza tus tareas diarias</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mis Tareas</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-300">Gestiona y organiza tus tareas diarias</p>
               </div>
               <button 
                 onClick={() => setShowTaskForm(!showTaskForm)}
-                className="btn btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium
+                  transition-colors duration-200 w-full sm:w-auto justify-center
+                  dark:bg-indigo-700 dark:hover:bg-indigo-600 dark:text-white"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
                 Nueva Tarea

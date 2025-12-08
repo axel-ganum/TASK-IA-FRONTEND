@@ -203,33 +203,35 @@ const priorityColor =
 
    {/* SUBTAREAS (versión resumida en la tarjeta) */}
 {task.subtasks?.length > 0 && (
-  <div className="border-t border-gray-100 pt-3">
-    <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+  <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+    <ul className="space-y-2">
       {task.subtasks.slice(0, 2).map((sub) => (
-        <li
-          key={sub.id}
-          className="flex justify-between items-center 
-    bg-gray-50 dark:bg-gray-800 
-    px-2 py-1 rounded-md 
-    border border-gray-200 dark:border-gray-700"
-        >
-          <span className="truncate">
-            {sub.completed ? "✅" : "🕓"} {sub.title}
+        <li key={sub.id} className="flex items-start gap-3">
+          <button
+            onClick={() =>
+              updateSubtaskMutation.mutate({
+                subtaskId: sub.id,
+                updates: { completed: !sub.completed },
+              })
+            }
+            className="flex-shrink-0 mt-0.5"
+            aria-label={sub.completed ? "Marcar como pendiente" : "Marcar como completada"}
+          >
+            <span className={`inline-flex items-center justify-center w-4 h-4 rounded border ${
+              sub.completed 
+                ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-800 dark:text-green-400'
+                : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600'
+            }`}>
+              {sub.completed && '✓'}
+            </span>
+          </button>
+          <span className={`text-sm ${
+            sub.completed 
+              ? 'line-through text-gray-400 dark:text-gray-500' 
+              : 'text-gray-600 dark:text-gray-300'
+          }`}>
+            {sub.title}
           </span>
-
-          <div className="flex gap-2 text-xs">
-            <button
-              onClick={() =>
-                updateSubtaskMutation.mutate({
-                  subtaskId: sub.id,
-                  updates: { completed: !sub.completed },
-                })
-              }
-              className="text-blue-600 hover:underline"
-            >
-              {sub.completed ? "Pendiente" : "Hecho"}
-            </button>
-          </div>
         </li>
       ))}
     </ul>
