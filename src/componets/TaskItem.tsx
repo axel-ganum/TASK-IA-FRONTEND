@@ -31,49 +31,76 @@ export function TaskItem({ task }: Props) {
 
   const [analysis, setAnalysis] = useState<{ insights?: string; suggestions?: string }>({});
 
+  const formatMarkdown = (text: string | undefined): string => {
+    if (!text) return '';
+    
+    // Limpiar el texto de formatos no deseados
+    let formatted = text
+      .replace(/^\n+|\n+$/g, '') // Eliminar saltos de línea al inicio y final
+      .replace(/\n{3,}/g, '\n\n') // Reemplazar múltiples saltos de línea
+      .replace(/^\s*[-*+]\s+/gm, '- ') // Estandarizar viñetas
+      .replace(/^#\s+(.*?)\s*$/gm, '## $1') // Formatear títulos
+      .replace(/`{3}([^`]+)`{3}/gs, '```$1```') // Formatear bloques de código
+      .replace(/`([^`]+)`/g, '`$1`') // Asegurar formato de código en línea
+      .replace(/\*\*([^*]+)\*\*/g, '**$1**') // Asegurar negritas
+      .replace(/\*([^*]+)\*/g, '*$1*'); // Asegurar cursivas
+
+    return formatted;
+  };
+
   const handleAnalyze = async () => {
     try {
       const result = await analyze.mutateAsync(task.id);
-      let content = typeof result === 'string' ? result : JSON.stringify(result);
+      let content = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
 
-      const match = content.match(/```json([\s\S]*?)```/);
-      if (match) content = match[1].trim();
+      // Intentar extraer JSON si está en un bloque de código
+      const jsonMatch = content.match(/```(?:json\n)?([\s\S]*?)```/);
+      if (jsonMatch) {
+        content = jsonMatch[1].trim();
+      }
 
-      let parsed = null;
+      // Limpiar el contenido
+      content = content
+        .replace(/^\"|\"$/g, '')
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .trim();
 
-      for (let i = 0; i < 3; i++) {
-        try {
-          parsed = JSON.parse(content);
-          break;
-        } catch {
-          content = content
-            .replace(/^"|"$/g, '')
-            .replace(/\\n/g, '\n')
-            .replace(/\\"/g, '"')
-            .replace(/\\\\/g, '\\')
-            .trim();
+      let parsed: any = { insights: '', suggestions: '' };
+
+      // Intentar parsear como JSON
+      try {
+        const potentialJson = content.match(/\{[\s\S]*\}/);
+        if (potentialJson) {
+          parsed = JSON.parse(potentialJson[0]);
+        } else {
+          // Si no es un JSON válido, tratar como texto plano
+          parsed.insights = content;
         }
+      } catch (e) {
+        // Si falla el parseo, usar el contenido como insights
+        parsed.insights = content;
       }
 
-      if (!parsed) {
-        const jsonBlock = content.match(/\{[^]*\}/);
-        if (jsonBlock) {
-          try {
-            parsed = JSON.parse(jsonBlock[0]);
-          } catch {}
-        }
-      }
+      // Formatear el contenido
+      const formattedInsights = formatMarkdown(
+        typeof parsed.insights === 'string' 
+          ? parsed.insights 
+          : JSON.stringify(parsed.insights, null, 2)
+      );
 
-      if (!parsed || typeof parsed !== 'object') {
-        parsed = {
-          insights: content,
-          suggestions: 'No se pudo formatear correctamente el análisis.',
-        };
-      }
+      const formattedSuggestions = formatMarkdown(
+        typeof parsed.suggestions === 'string'
+          ? parsed.suggestions
+          : parsed.suggestions 
+            ? JSON.stringify(parsed.suggestions, null, 2)
+            : ''
+      );
 
       setAnalysis({
-        insights: parsed.insights?.replace(/\\n/g, '\n'),
-        suggestions: parsed.suggestions?.replace(/\\n/g, '\n'),
+        insights: formattedInsights || 'No se encontraron insights.',
+        suggestions: formattedSuggestions || 'No se encontraron sugerencias.',
       });
 
       setOpenAnalysis(true);
@@ -262,40 +289,39 @@ const priorityColor =
 
      {/* MODAL: DETALLE COMPLETO (descripción + subtareas) */}
 <Dialog open={openDescription} onOpenChange={setOpenDescription}>
-  <DialogContent className="fixed z-[999999] max-w-lg max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl mt-10">
-    <DialogHeader>
-      <DialogTitle>{task.title}</DialogTitle>
-      <DialogDescription className="text-gray-600 dark:text-gray-400">
-        Descripción completa y subtareas.
+  <DialogContent className="fixed z-[999999] max-w-lg max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl mt-10 border border-gray-200 dark:border-gray-700">
+    <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+      <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-white">{task.title}</DialogTitle>
+      <DialogDescription className="text-gray-600 dark:text-gray-300">
+        Descripción completa y subtareas
       </DialogDescription>
     </DialogHeader>
 
     {/* DESCRIPCIÓN */}
-    <div className="prose max-w-none text-sm mt-3 dark:text-gray-300">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {task.description || "Sin descripción"}
-      </ReactMarkdown>
+    <div className="px-6 py-4">
+      <div className="prose dark:prose-invert max-w-none text-gray-800 dark:text-white [&_p]:dark:text-white [&_ul]:dark:text-white [&_ol]:dark:text-white [&_li]:dark:text-white">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {task.description || "Sin descripción"}
+        </ReactMarkdown>
+      </div>
     </div>
 
     {/* SUBTAREAS COMPLETAS */}
-    <div className="mt-5">
-      <h3 className="text-sm font-semibold mb-2">Subtareas</h3>
+    {task.subtasks?.length > 0 && (
+      <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Subtareas</h3>
+          <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-200">
+            {task.subtasks.filter(st => st.completed).length} de {task.subtasks.length}
+          </span>
+        </div>
 
-      <ul className="space-y-2">
-        {task.subtasks?.map((sub) => (
-          <li
-            key={sub.id}
-            className="flex justify-between items-center 
-    bg-gray-50 dark:bg-gray-800 
-    p-2 rounded-lg 
-    border border-gray-200 dark:border-gray-700 
-    text-sm dark:text-gray-300"
-          >
-            <span>
-              {sub.completed ? "✅" : "🕓"} {sub.title}
-            </span>
-
-            <div className="flex gap-2 text-xs">
+        <ul className="space-y-2">
+          {task.subtasks.map((sub) => (
+            <li
+              key={sub.id}
+              className="group flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+            >
               <button
                 onClick={() =>
                   updateSubtaskMutation.mutate({
@@ -303,22 +329,45 @@ const priorityColor =
                     updates: { completed: !sub.completed },
                   })
                 }
-                className="text-blue-600 hover:underline"
+                className="flex-shrink-0 mt-0.5"
+                aria-label={sub.completed ? "Marcar como pendiente" : "Marcar como completada"}
               >
-                {sub.completed ? "Pendiente" : "Hecho"}
+                <span className={`inline-flex items-center justify-center w-4 h-4 rounded border ${
+                  sub.completed 
+                    ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-800 dark:text-green-400'
+                    : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600'
+                }`}>
+                  {sub.completed && '✓'}
+                </span>
               </button>
+              
+              <div className="flex-1 min-w-0">
+                <span className={`text-sm text-gray-800 dark:text-white ${
+                  sub.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
+                }`}>
+                  {sub.title}
+                </span>
+              </div>
 
               <button
-                onClick={() => deleteSubtaskMutation.mutate(sub.id)}
-                className="text-red-600 hover:underline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (window.confirm('¿Estás seguro de eliminar esta subtarea?')) {
+                    deleteSubtaskMutation.mutate(sub.id);
+                  }
+                }}
+                className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 dark:text-white dark:hover:text-red-400 transition-all"
+                aria-label="Eliminar subtarea"
               >
-                Eliminar
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
     {/* CREAR SUBTAREAS */}
    <div className="mt-4 flex justify-end gap-3 flex-wrap text-xs font-medium">
