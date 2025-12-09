@@ -358,7 +358,7 @@ const priorityColor =
               <h4 className="flex items-center gap-2 text-lg font-medium text-blue-800 dark:text-blue-200 mb-3">
                 <span className="text-xl">🔍</span> Insights
               </h4>
-              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+              <div className="prose prose-sm max-w-none text-gray-700 dark:text-white [&_p]:dark:text-white [&_ul]:dark:text-white [&_ol]:dark:text-white [&_li]:dark:text-white">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {analysis.insights || 'No hay insights disponibles'}
                 </ReactMarkdown>
@@ -369,7 +369,7 @@ const priorityColor =
               <h4 className="flex items-center gap-2 text-lg font-medium text-purple-800 dark:text-purple-200 mb-3">
                 <span className="text-xl">💡</span> Sugerencias
               </h4>
-              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+              <div className="prose prose-sm max-w-none text-gray-700 dark:text-white [&_p]:dark:text-white [&_ul]:dark:text-white [&_ol]:dark:text-white [&_li]:dark:text-white">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {analysis.suggestions || 'No hay sugerencias disponibles'}
                 </ReactMarkdown>

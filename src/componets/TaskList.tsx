@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui
 import { DialogHeader } from '../utils/dialog';
 import remarkGfm from 'remark-gfm';
 import { Button } from '../utils/button';
+import React from 'react';
 
 export function TaskList({ filter }: { filter: 'all' | 'today' | 'upcoming' | 'completed' | 'trabajo' | 'personal' | 'estudio' }) {
   const { tasks, isLoading, isError, summarize } = useTasks();
@@ -262,8 +263,39 @@ const filteredTasks = filteredBySection.filter(task => {
         <span className="text-xl">📄</span> Resumen
       </h4>
 
-      <div className="prose prose-sm max-w-none text-gray-800 dark:text-gray-100">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      <div className="prose prose-sm max-w-none text-gray-800 dark:text-white [&_p]:dark:text-white [&_ul]:dark:text-white [&_ol]:dark:text-white [&_li]:dark:text-white">
+        <ReactMarkdown 
+          remarkPlugins={[remarkGfm]}
+          components={{
+            li: ({children}) => {
+              // Convertir children a string para procesarlo
+              const childrenArray = React.Children.toArray(children);
+              const firstChild = childrenArray[0];
+              const childText = typeof firstChild === 'string' ? firstChild : '';
+              
+              // Verificar si el elemento de la lista es una tarea marcada (comienza con [x] o [X])
+              const isChecked = childText.startsWith('[x]') || childText.startsWith('[X]');
+              
+              // Eliminar el marcador [x], [X] o [ ] del texto
+              const text = childText.replace(/^\s*\[x\]|\[X\]|\[ \]\s*/, '').trim();
+              
+              return (
+                <div className="flex items-start gap-2 mb-1">
+                  <span className={`inline-flex items-center justify-center w-4 h-4 rounded border mt-1 flex-shrink-0 ${
+                    isChecked 
+                      ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-800 dark:text-green-400' 
+                      : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600'
+                  }`}>
+                    {isChecked && '✓'}
+                  </span>
+                  <span className={`text-gray-800 dark:text-white ${isChecked ? 'line-through text-gray-500 dark:text-gray-300' : ''}`}>
+                    {text || childrenArray.slice(1)}
+                  </span>
+                </div>
+              );
+            }
+          }}
+        >
           {summaryText || 'No se pudo generar un resumen.'}
         </ReactMarkdown>
       </div>
