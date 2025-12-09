@@ -258,11 +258,11 @@ const filteredTasks = filteredBySection.filter(task => {
 
   <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
     <div className="bg-indigo-50/50 dark:bg-indigo-900/20 p-5 rounded-lg border border-indigo-100 dark:border-indigo-800">
-      <h4 className="flex items-center gap-2 text-lg font-medium text-indigo-800 dark:text-indigo-300 mb-3">
+      <h4 className="flex items-center gap-2 text-lg font-medium text-indigo-800 dark:text-indigo-200 mb-3">
         <span className="text-xl">📄</span> Resumen
       </h4>
 
-      <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <div className="prose prose-sm max-w-none text-gray-800 dark:text-gray-100">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {summaryText || 'No se pudo generar un resumen.'}
         </ReactMarkdown>

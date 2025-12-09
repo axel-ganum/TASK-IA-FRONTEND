@@ -152,7 +152,7 @@ const getStatusClass = (status: string) => {
 </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 text-gray-800 dark:text-gray-100">
           {/* Meta Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
@@ -181,7 +181,7 @@ const getStatusClass = (status: string) => {
 
           {/* Description */}
           {task.description && (
-            <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: safeDescription }} />
+            <div className="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-100" dangerouslySetInnerHTML={{ __html: safeDescription }} />
           )}
           {/* Subtareas */}
           <div className="mt-8">
