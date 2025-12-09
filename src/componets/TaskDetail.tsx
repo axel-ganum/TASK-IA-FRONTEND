@@ -181,7 +181,8 @@ const getStatusClass = (status: string) => {
 
           {/* Description */}
           {task.description && (
-            <div className="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-100" dangerouslySetInnerHTML={{ __html: safeDescription }} />
+            <div className="prose dark:prose-invert max-w-none text-gray-800 dark:text-white [&_p]:dark:text-white [&_ul]:dark:text-white [&_ol]:dark:text-white [&_li]:dark:text-white" 
+                 dangerouslySetInnerHTML={{ __html: safeDescription }} />
           )}
           {/* Subtareas */}
           <div className="mt-8">
@@ -225,10 +226,10 @@ const getStatusClass = (status: string) => {
                           className="flex-shrink-0 mt-0.5"
                           aria-label={subtask.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
                         >
-                          <span className={`inline-flex items-center justify-center w-5 h-5 rounded border ${
+                          <span className={`inline-flex items-center justify-center w-4 h-4 rounded border ${
                             subtask.completed 
-                              ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-700 dark:text-green-400'
-                              : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 group-hover:border-indigo-400 dark:group-hover:border-indigo-400 transition-colors'
+                              ? 'bg-green-100 border-green-300 text-green-600 dark:bg-green-900/50 dark:border-green-800 dark:text-green-400' 
+                              : 'bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600'
                           }`}>
                             {subtask.completed && '✓'}
                           </span>
@@ -236,10 +237,10 @@ const getStatusClass = (status: string) => {
                         
                         <div className="flex-1 min-w-0">
                           <span 
-                            className={`text-sm ${
+                            className={`text-sm text-gray-800 dark:text-white ${
                               subtask.completed 
-                                ? 'line-through text-gray-400 dark:text-gray-500' 
-                                : 'text-gray-700 dark:text-gray-200 font-medium'
+                                ? 'line-through text-gray-500 dark:text-gray-400' 
+                                : 'font-medium'
                             }`}
                             title={subtask.title}
                           >
@@ -255,7 +256,7 @@ const getStatusClass = (status: string) => {
                                 onDeleteSubtask(subtask.id);
                               }
                             }}
-                            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-all"
+                            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 dark:text-white dark:hover:text-red-400 transition-all"
                             aria-label="Eliminar subtarea"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
