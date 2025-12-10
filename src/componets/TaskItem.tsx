@@ -31,112 +31,88 @@ export function TaskItem({ task }: Props) {
 
   const [analysis, setAnalysis] = useState<{ insights?: string; suggestions?: string }>({});
 
-  const formatMarkdown = (text: string | undefined): string => {
-    if (!text) return '';
-    
-    // Limpiar el texto de formatos no deseados
-    let cleanedText = text
-      .replace(/^\n+|\n+$/g, '') // Eliminar saltos de línea al inicio y final
-      .replace(/\n{3,}/g, '\n\n') // Reemplazar múltiples saltos de línea
-      .replace(/^\s*[-*+]\s+/gm, '- ') // Estandarizar viñetas
-      .replace(/^#\s+(.*?)\s*$/gm, '## $1') // Formatear títulos
-      .replace(/```(?:json\n)?([\s\S]*?)```/g, (match, code) => `\`\`\`\n${code.trim()}\n\`\`\``) // Preservar bloques de código
-      .replace(/`([^`]+)`/g, '`$1`') // Asegurar formato de código en línea
-      .replace(/\\n/g, '\n') // Convertir \n a saltos de línea reales
-      .replace(/\\"/g, '"') // Convertir \" a comillas
-      .replace(/\\\\/g, '\\'); // Convertir \\\\ a \\
-
-    // Si el texto parece ser un objeto JSON, intentar convertirlo a string formateado
-    try {
-      const trimmed = cleanedText.trim();
-      if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || 
-          (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
-        const parsed = JSON.parse(trimmed);
-        // Si es un objeto con propiedades insights o suggestions, extraer el contenido
-        if (typeof parsed === 'object') {
-          if (parsed.insights || parsed.suggestions) {
-            return parsed.insights || parsed.suggestions || '';
-          }
-          // Si es un array, unir los elementos con saltos de línea
-          if (Array.isArray(parsed)) {
-            return parsed.join('\n');
-          }
-          // Si es un objeto, intentar extraer valores de texto
-          const textValues = Object.values(parsed)
-            .filter(v => typeof v === 'string')
-            .join('\n\n');
-          return textValues || JSON.stringify(parsed, null, 2);
-        }
-      }
-    } catch (e) {
-      // Si falla el parseo, continuar con el texto limpio
-    }
-    
-    return cleanedText;
-  };
-
   const handleAnalyze = async () => {
     try {
       const result = await analyze.mutateAsync(task.id);
-      console.log('Respuesta cruda de la IA:', result); // Para depuración
-      
-      // Convertir a string si no lo es
-      let content = typeof result === 'string' 
-        ? result 
-        : JSON.stringify(result, null, 2);
+      const formatMarkdown = (text: any): string => {
+        if (!text) return '';
+        
+        // Si es un objeto, convertirlo a string formateado
+        if (typeof text === 'object' && text !== null) {
+          // Si es un objeto con propiedades específicas, extraer el contenido relevante
+          if ('insights' in text || 'suggestions' in text) {
+            return text.insights || text.suggestions || '';
+          }
+          // Si es un array, unir los elementos
+          if (Array.isArray(text)) {
+            return text.map(item => 
+              typeof item === 'string' ? item : JSON.stringify(item, null, 2)
+            ).join('\n\n');
+          }
+          // Para otros objetos, extraer valores de texto
+          const textValues = Object.values(text)
+            .filter(v => v !== null && v !== undefined)
+            .map(v => {
+              if (typeof v === 'string') return v;
+              if (typeof v === 'object') return JSON.stringify(v, null, 2);
+              return String(v);
+            })
+            .join('\n\n');
+          return textValues || '';
+        }
+        
+        // Si es un string, limpiar el formato
+        if (typeof text === 'string') {
+          return text
+            .replace(/^\n+|\n+$/g, '') // Eliminar saltos de línea al inicio y final
+            .replace(/\n{3,}/g, '\n\n') // Reemplazar múltiples saltos de línea
+            .replace(/^\s*[-*+]\s+/gm, '- ') // Estandarizar viñetas
+            .replace(/^#\s+(.*?)\s*$/gm, '## $1') // Formatear títulos
+            .replace(/```(?:json\n)?([\s\S]*?)```/g, (match, code) => `\`\`\`\n${code.trim()}\n\`\`\``) // Preservar bloques de código
+            .replace(/`([^`]+)`/g, '`$1`') // Asegurar formato de código en línea
+            .replace(/\\n/g, '\n') // Convertir \n a saltos de línea reales
+            .replace(/\\"/g, '"') // Convertir \" a comillas
+            .replace(/\\\\/g, '\\'); // Convertir \\\\ a \\
+        }
+        
+        // Para cualquier otro tipo, convertirlo a string
+        return String(text);
+      };
 
-      // Intentar extraer JSON si está en un bloque de código
-      const jsonMatch = content.match(/```(?:json\n)?([\s\S]*?)```/);
-      if (jsonMatch) {
-        content = jsonMatch[1].trim();
-      }
+      let insights = 'No se encontraron insights.';
+      let suggestions = 'No se encontraron sugerencias.';
+      let data = result;
 
-      // Limpiar el contenido de caracteres de escape
-      content = content
-        .replace(/^\"|\"$/g, '') // Eliminar comillas al inicio y final
-        .replace(/\\n/g, '\n')    // Convertir \n a saltos de línea reales
-        .replace(/\\"/g, '"')     // Convertir \" a comillas
-        .replace(/\\\\/g, '\\') // Convertir \\\\ a \\
-        .trim();
-
-      console.log('Contenido limpio:', content); // Para depuración
-
-      // Aplicar formato Markdown al contenido completo primero
-      const formattedContent = formatMarkdown(content);
-      
-      // Intentar extraer insights y sugerencias del contenido formateado
-      let insights = '';
-      let suggestions = '';
-
-      // Buscar secciones comunes en el texto
-      const insightsMatch = formattedContent.match(/##?\s*(?:Insights?|Análisis?|Conclusiones?)[:\s]*([\s\S]*?)(?=##?\s*(?:Sugerencias?|Recomendaciones?)|$)/i);
-      const suggestionsMatch = formattedContent.match(/##?\s*(?:Sugerencias?|Recomendaciones?)[:\s]*([\s\S]*?)(?=##?\s*(?:Insights?|Análisis?|$)|$)/i);
-
-      if (insightsMatch) {
-        insights = insightsMatch[1].trim();
-      }
-      if (suggestionsMatch) {
-        suggestions = suggestionsMatch[1].trim();
-      }
-
-      // Si no se encontraron secciones específicas, usar el contenido completo
-      if (!insights && !suggestions) {
-        // Intentar dividir en párrafos
-        const paragraphs = formattedContent.split(/\n\s*\n/);
-        if (paragraphs.length > 1) {
-          insights = paragraphs[0];
-          suggestions = paragraphs.slice(1).join('\n\n');
-        } else {
-          insights = formattedContent;
+      // 1. Si la respuesta es un string, intentar parsearla como JSON.
+      if (typeof data === 'string') {
+        try {
+          // Limpiar el string de posibles bloques de código markdown
+          const cleanedString = (typeof data === 'string' ? data : '').replace(/```(json)?/g, '').trim();
+          data = JSON.parse(cleanedString);
+        } catch (e) {
+          // Si no es un JSON válido, lo tratamos como texto plano/Markdown.
+          console.log("La respuesta es un string, pero no es JSON. Se tratará como Markdown.");
         }
       }
 
-      console.log('Insights extraídos:', insights); // Para depuración
-      console.log('Sugerencias extraídas:', suggestions); // Para depuración
+      // 2. Procesar el resultado (ya sea el objeto original o el parseado).
+      if (typeof data === 'object' && data !== null) {
+        // Si es un objeto, buscamos las claves 'insights' y 'suggestions'.
+        insights = formatMarkdown(data.insights) || 'No se encontraron insights.';
+        suggestions = formatMarkdown(data.suggestions) || 'No se encontraron sugerencias.';
+
+        // Si no se encuentran, pero hay otras claves, mostramos el objeto JSON formateado.
+        if (data.insights === undefined && data.suggestions === undefined) {
+          insights = formatMarkdown(data);
+        }
+      } else if (typeof data === 'string') {
+        // Si después de todo sigue siendo un string, lo asignamos a 'insights'.
+        insights = formatMarkdown(data);
+      }
 
       setAnalysis({
-        insights: insights || 'No se encontraron insights.',
-        suggestions: suggestions || 'No se encontraron sugerencias.',
+        insights,
+        suggestions,
       });
 
       setOpenAnalysis(true);
@@ -429,7 +405,7 @@ const priorityColor =
      p-0
      overflow-visible
      bg-white dark:bg-gray-900">
-          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b flex-col">
             <DialogTitle className="ext-xl font-semibold text-gray-900 dark:text-gray-100">
               Análisis de la tarea
             </DialogTitle>
@@ -438,7 +414,7 @@ const priorityColor =
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+          <div className="flex flex-col flex-1 overflow-y-auto px-6 py-4 space-y-6">
             <div className="bg-blue-50/50 dark:bg-blue-900/30 p-5 rounded-lg border border-blue-100 dark:border-blue-800">
               <h4 className="flex items-center gap-2 text-lg font-medium text-blue-800 dark:text-blue-200 mb-3">
                 <span className="text-xl">🔍</span> Insights
