@@ -5,13 +5,57 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "^react-markdown$": "<rootDir>/__mocks__/react-markdown.js",
+      "^remark-gfm$": "<rootDir>/__mocks__/remark-gfm.js"
+    },
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(react-markdown|vfile|vfile-message|unist-util-stringify-position|unist-util-position|unist-util-generated|unist-util-position-from-estree|unist-util-remove-position|unist-util-visit|unist-util-is|unist-util-visit-parents|hast-util-whitespace|hast-util-is-element|hast-util-has-property|hast-util-to-string|hast-util-from-parse5|hastscript|hast-util-parse-selector|property-information|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|bail|trough|ccount|character-entities|decode-named-character-reference|character-entities-legacy|character-entities-html4|character-reference-invalid|is-plain-obj)/)"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node"
+    ]
   },
   "devDependencies": {
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.0",
     "autoprefixer": "^10.4.21",
+    "babel-jest": "^30.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.3.4",
     "typescript": "^5.9.3",
@@ -19,7 +63,7 @@
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
-    "@tanstack/react-query": "^5.90.5",
+    "@tanstack/react-query": "^5.90.12",
     "@types/date-fns": "^2.6.3",
     "axios": "^1.12.2",
     "date-fns": "^4.1.0",
