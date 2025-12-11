@@ -1,73 +1,105 @@
-# React + TypeScript + Vite
+# Task Manager - Gestor de Tareas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Task Manager](https://img.shields.io/badge/status-en%20desarrollo-yellow)
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-3178C6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-4.0.0-646CFF?logo=vite)
 
-Currently, two official plugins are available:
+Una aplicación moderna de gestión de tareas construida con React, TypeScript y Vite. Esta aplicación te permite crear, ver, editar y eliminar tareas de manera sencilla e intuitiva.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Características
 
-## React Compiler
+- 📝 Crear nuevas tareas con título, descripción y estado
+- ✅ Marcar tareas como completadas
+- ✏️ Editar tareas existentes
+- 🗑️ Eliminar tareas
+- 🔍 Filtrar tareas por estado (todas, pendientes, completadas)
+- 📱 Diseño responsivo que funciona en cualquier dispositivo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tecnologías utilizadas
 
-## Expanding the ESLint configuration
+- **Frontend**:
+  - React 18
+  - TypeScript
+  - Vite
+  - React Router DOM
+  - Styled Components / CSS Modules (según la configuración del proyecto)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📦 Requisitos previos
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Antes de comenzar, asegúrate de tener instalado:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js (versión 16 o superior)
+- npm o yarn
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Cómo comenzar
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/tu-usuario/task-manager.git
+   cd task-manager
+   ```
+
+2. **Instalar dependencias**
+   ```bash
+   npm install
+   # o
+   yarn install
+   ```
+
+3. **Iniciar el servidor de desarrollo**
+   ```bash
+   npm run dev
+   # o
+   yarn dev
+   ```
+
+4. **Abrir en el navegador**
+   La aplicación estará disponible en [http://localhost:5173](http://localhost:5173)
+
+## 🏗️ Estructura del proyecto
+
+```
+src/
+├── components/         # Componentes reutilizables
+│   ├── TaskList.tsx    # Lista de tareas
+│   ├── TaskItem.tsx    # Elemento individual de tarea
+│   ├── TaskForm.tsx    # Formulario para crear/editar tareas
+│   └── TaskDetail.tsx  # Vista detallada de una tarea
+├── pages/             
+│   └── Home.tsx       # Página principal
+├── App.tsx            # Componente raíz de la aplicación
+└── main.tsx           # Punto de entrada de la aplicación
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧪 Ejecutar pruebas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm test
+# o
+yarn test
 ```
+
+## 🏗️ Construir para producción
+
+```bash
+npm run build
+# o
+yarn build
+```
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más información.
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor, lee las [pautas de contribución](CONTRIBUTING.md) antes de enviar un pull request.
+
+## 📧 Contacto
+
+Si tienes alguna pregunta o sugerencia, no dudes en abrir un issue o contactarme directamente.
+
+---
+
+Hecho con ❤️ por [Tu Nombre]
