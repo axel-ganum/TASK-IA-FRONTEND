@@ -31,96 +31,98 @@ export function TaskItem({ task }: Props) {
 
   const [analysis, setAnalysis] = useState<{ insights?: string; suggestions?: string }>({});
 
-  const handleAnalyze = async () => {
-    try {
-      const result = await analyze.mutateAsync(task.id);
-      const formatMarkdown = (text: any): string => {
-        if (!text) return '';
-        
-        // Si es un objeto, convertirlo a string formateado
-        if (typeof text === 'object' && text !== null) {
-          // Si es un objeto con propiedades específicas, extraer el contenido relevante
-          if ('insights' in text || 'suggestions' in text) {
-            return text.insights || text.suggestions || '';
-          }
-          // Si es un array, unir los elementos
-          if (Array.isArray(text)) {
-            return text.map(item => 
-              typeof item === 'string' ? item : JSON.stringify(item, null, 2)
-            ).join('\n\n');
-          }
-          // Para otros objetos, extraer valores de texto
-          const textValues = Object.values(text)
-            .filter(v => v !== null && v !== undefined)
-            .map(v => {
-              if (typeof v === 'string') return v;
-              if (typeof v === 'object') return JSON.stringify(v, null, 2);
-              return String(v);
-            })
-            .join('\n\n');
-          return textValues || '';
-        }
-        
-        // Si es un string, limpiar el formato
-        if (typeof text === 'string') {
-          return text
-            .replace(/^\n+|\n+$/g, '') // Eliminar saltos de línea al inicio y final
-            .replace(/\n{3,}/g, '\n\n') // Reemplazar múltiples saltos de línea
-            .replace(/^\s*[-*+]\s+/gm, '- ') // Estandarizar viñetas
-            .replace(/^#\s+(.*?)\s*$/gm, '## $1') // Formatear títulos
-            .replace(/```(?:json\n)?([\s\S]*?)```/g, (match, code) => `\`\`\`\n${code.trim()}\n\`\`\``) // Preservar bloques de código
-            .replace(/`([^`]+)`/g, '`$1`') // Asegurar formato de código en línea
-            .replace(/\\n/g, '\n') // Convertir \n a saltos de línea reales
-            .replace(/\\"/g, '"') // Convertir \" a comillas
-            .replace(/\\\\/g, '\\'); // Convertir \\\\ a \\
-        }
-        
-        // Para cualquier otro tipo, convertirlo a string
-        return String(text);
-      };
+  // Helper function to extract the most relevant string content from a potentially nested object.
+  // This handles cases where the AI might return an object like { 
+const handleAnalyze = async () => {
+  try {
+    const result = await analyze.mutateAsync(task.id);
 
-      let insights = 'No se encontraron insights.';
-      let suggestions = 'No se encontraron sugerencias.';
-      let data = result;
+    const formatMarkdown = (text: any): string => {
+      if (!text) return '';
 
-      // 1. Si la respuesta es un string, intentar parsearla como JSON.
-      if (typeof data === 'string') {
-        try {
-          // Limpiar el string de posibles bloques de código markdown
-          const cleanedString = (typeof data === 'string' ? data : '').replace(/```(json)?/g, '').trim();
-          data = JSON.parse(cleanedString);
-        } catch (e) {
-          // Si no es un JSON válido, lo tratamos como texto plano/Markdown.
-          console.log("La respuesta es un string, pero no es JSON. Se tratará como Markdown.");
-        }
+      if (typeof text === 'string') {
+        return text
+          .replace(/^\n+|\n+$/g, '')
+          .replace(/\n{3,}/g, '\n\n')
+          .replace(/^\s*[-*+]\s+/gm, '- ')
+          .replace(/^#\s+(.*?)\s*$/gm, '## $1')
+          .replace(/```(?:json\n)?([\s\S]*?)```/g, (match, code) => `\`\`\`\n${code.trim()}\n\`\`\``)
+          .replace(/`([^`]+)`/g, '`$1`')
+          .replace(/\\n/g, '\n')
+          .replace(/\\"/g, '"')
+          .replace(/\\\\/g, '\\');
       }
 
-      // 2. Procesar el resultado (ya sea el objeto original o el parseado).
-      if (typeof data === 'object' && data !== null) {
-        // Si es un objeto, buscamos las claves 'insights' y 'suggestions'.
-        insights = formatMarkdown(data.insights) || 'No se encontraron insights.';
-        suggestions = formatMarkdown(data.suggestions) || 'No se encontraron sugerencias.';
-
-        // Si no se encuentran, pero hay otras claves, mostramos el objeto JSON formateado.
-        if (data.insights === undefined && data.suggestions === undefined) {
-          insights = formatMarkdown(data);
-        }
-      } else if (typeof data === 'string') {
-        // Si después de todo sigue siendo un string, lo asignamos a 'insights'.
-        insights = formatMarkdown(data);
+      if (typeof text === 'object' && text !== null) {
+        return JSON.stringify(text, null, 2);
       }
 
-      setAnalysis({
-        insights,
-        suggestions,
-      });
+      return String(text);
+    };
 
-      setOpenAnalysis(true);
-    } catch (error) {
-      console.error('❌ Error al analizar la tarea:', error);
-      toast.error('Error al analizar la tarea');
+    let parsedData: any = result;
+
+    // 1. Intentar parsear JSON si viene como string
+    if (typeof result === 'string') {
+      try {
+        const cleaned = (typeof result === 'string' ? result : String(result))
+          .replace(/```(?:json\n)?([\s\S]*?)```/g, '$1')
+          .trim();
+
+        parsedData = JSON.parse(cleaned);
+      } catch {
+        parsedData = result;
+      }
     }
-  };
+
+    // ---------------------------------------------------------
+    // 2. EXTRAER INSIGHTS Y SUGGESTIONS (ESTA ES LA PARTE NUEVA)
+    // ---------------------------------------------------------
+    const extractText = (value: any): string => {
+      if (!value) return '';
+
+      if (typeof value === 'string') return value;
+
+      if (Array.isArray(value)) return value.join('\n');
+
+      if (typeof value === 'object') {
+        if (typeof value.insights === 'string') return value.insights;
+        if (typeof value.suggestions === 'string') return value.suggestions;
+        if (Array.isArray(value.suggestions)) return value.suggestions.join('\n');
+        return '';
+      }
+
+      return String(value);
+    };
+
+    let insightsRaw = extractText(parsedData?.insights);
+    let suggestionsRaw = extractText(parsedData?.suggestions);
+
+    // 3. Fallback si no vino nada útil
+    if (!insightsRaw && typeof parsedData === 'string') {
+      insightsRaw = parsedData;
+    }
+
+    if (!insightsRaw && !suggestionsRaw) {
+      insightsRaw = 'No se encontraron insights.';
+      suggestionsRaw = 'No se encontraron sugerencias.';
+    }
+
+    setAnalysis({
+      insights: formatMarkdown(insightsRaw),
+      suggestions: formatMarkdown(suggestionsRaw),
+    });
+
+    setOpenAnalysis(true);
+
+  } catch (error) {
+    console.error('❌ Error al analizar la tarea:', error);
+    toast.error('Error al analizar la tarea');
+  }
+};
+
+
+
 
   const priority = (task.priority || "").toString().trim().toLowerCase();
 
