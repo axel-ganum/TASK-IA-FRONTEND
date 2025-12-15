@@ -3,6 +3,7 @@ import { TaskItem } from '../TaskItem';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import '@testing-library/jest-dom';
+import type { Task } from '../../types/Task';
 
 // Mock the useTasks hook
 jest.mock('../../hooks/useTasks', () => ({
@@ -43,14 +44,18 @@ jest.mock('react-markdown', () => ({
 jest.mock('remark-gfm', () => ({}));
 
 describe('TaskItem', () => {
-  const mockTask = {
+  const mockTask: Task = {
     id: '1',
     title: 'Test Task',
     description: 'Test description',
     completed: false,
-    priority: 'medium',
-    category: 'trabajo',
-    dueDate: '2025-12-31',
+    status: 'pending',
+    priority: 'high',
+    category: 'work',
+    dueDate: '2023-12-31',
+    tags: ['test', 'important'],
+    createdAt: '2023-01-01T00:00:00.000Z',
+    updatedAt: '2023-01-01T00:00:00.000Z',
     subtasks: [
       { id: 'sub1', title: 'Subtask 1', completed: false },
       { id: 'sub2', title: 'Subtask 2', completed: true },
