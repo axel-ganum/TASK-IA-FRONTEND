@@ -156,9 +156,18 @@ const priorityColor =
     >
       {/* ENCABEZADO */}
       <div className="flex justify-between items-start gap-2 mb-3">
-        <h3 className="font-medium text-base text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
-          {task.completed ? "✅" : "🕓"} {task.title}
-        </h3>
+        <div className="flex items-center gap-2">
+          <span className={`flex-shrink-0 w-4 h-4 mt-0.5 border rounded flex items-center justify-center ${task.completed ? 'bg-indigo-600 border-indigo-600' : 'border-gray-300'}`}>
+            {task.completed && (
+              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </span>
+          <h3 className="font-medium text-base text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">
+            {task.title}
+          </h3>
+        </div>
 
         <div className="flex flex-wrap gap-2 text-sm font-medium">
           <button
